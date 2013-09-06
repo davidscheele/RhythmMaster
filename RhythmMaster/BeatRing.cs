@@ -69,11 +69,11 @@ public class BeatRing
         }
     }
     private float scale = 1f;
-    public String Scale
+    public float Scale
     {
         get
         {
-            return scale.ToString();
+            return scale;
         }
     }
     private Boolean scaleswitcher = true;
@@ -126,8 +126,10 @@ public class BeatRing
     {
         scaleDown();
         giveNewTopLeft();
+        if (checkScale())
+        {
             _spriteBatch.Draw(texture, position, null, Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
-
+        }
             //this.scaleUpAndDown();
             return checkScale();
     }
@@ -153,7 +155,7 @@ public class BeatRing
     }
     public Boolean checkScale() //Bigger than 0.5f scale
     {
-        if (scale <= 0.5f)
+        if (scale <= 0.35f)
         {
             return false;
         }

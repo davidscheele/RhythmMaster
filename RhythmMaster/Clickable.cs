@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 public abstract class Clickable
 {
+    private Boolean draw = true;
     private Vector2 position = new Vector2(0, 0);
     public Vector2 Center
     {
@@ -57,13 +58,14 @@ public abstract class Clickable
         }
     }
     private float scale = 1f;
-    public String Scale
+    public float Scale
     {
         get
         {
-            return scale.ToString();
+            return scale;
         }
     }
+
     private Boolean scaleswitcher = true;
     public Texture2D Texture
     {
@@ -111,15 +113,19 @@ public abstract class Clickable
     }
     public void Draw(SpriteBatch _spriteBatch)
     {
-
+        if (this.draw)
+        {
             _spriteBatch.Draw(texture, position, null, Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
-
+        }
             
             //this.scaleUpAndDown();
 
         this.Bounds = new Rectangle((int)this.TopLeft.X, (int)this.TopLeft.Y, (int)this.Width, (int)this.Height);
 
-        this.BeatRing.Draw(_spriteBatch);
+        if (!this.BeatRing.Draw(_spriteBatch))
+        {
+            this.draw = false;
+        }
         
     }
 

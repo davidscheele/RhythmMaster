@@ -25,8 +25,10 @@ namespace RhythmMaster
         Boolean testBoolForRing = true;
         //String debug02String = "";
         //String debug03String = "";
-        //String debug04String = "";
+        String debug04String = "";
         //String debug05String = "";
+
+        
 
         Clickable testbeat;
         //BeatRing testring;
@@ -36,6 +38,8 @@ namespace RhythmMaster
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+
+            TouchPanel.EnabledGestures = GestureType.Tap;
 
             // Frame rate is 30 fps by default for Windows Phone.
             TargetElapsedTime = TimeSpan.FromTicks(333333);
@@ -93,9 +97,54 @@ namespace RhythmMaster
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
+            while (TouchPanel.IsGestureAvailable)
+            {
+                GestureSample gesture = TouchPanel.ReadGesture();
+
+                switch (gesture.GestureType)
+                {
+                    case (GestureType.Tap):
+                        if (checkIntersect(gesture.Position))
+                        {
+                            if (testbeat != null)
+                            {
+                                if (testbeat.BeatRing.Scale > 0.6f || testbeat.BeatRing.Scale < 0.4f)
+                                {
+                                    debug04String = "FAIL!!!!";
+                                    testbeat = null;
+                                }
+                                else
+                                {
+                                    debug04String = "SPOT ON!!!";
+                                    testbeat = null;
+                                }
+                            }
+                        }
+                        break;
+
+                }
+
+            }
+
             // TODO: Add your update logic here
 
             base.Update(gameTime);
+        }
+
+        private Boolean checkIntersect(Vector2 tapPosition)
+        {
+            if (testbeat != null)
+            {
+                if (testbeat.Bounds.Intersects(new Rectangle((int)tapPosition.X, (int)tapPosition.Y, 1, 1)))
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            return false;
         }
 
         /// <summary>
@@ -107,11 +156,15 @@ namespace RhythmMaster
             GraphicsDevice.Clear(Color.CornflowerBlue);
             spriteBatch.Begin();
             spriteBatch.DrawString(debugFont, debug01String, new Vector2(10, 10), Color.Black);
-            spriteBatch.DrawString(debugFont, testbeat.Scale, new Vector2(10, 20), Color.Black);
-            //spriteBatch.DrawString(debugFont, debug03String, new Vector2(10, 30), Color.Black);
+
+            //spriteBatch.DrawString(debugFont, testbeat.Scale.ToString(), new Vector2(10, 20), Color.Black);
+            spriteBatch.DrawString(debugFont, debug04String, new Vector2(10, 30), Color.Black);
             //spriteBatch.DrawString(debugFont, debug04String, new Vector2(10, 40), Color.Black);
             //spriteBatch.DrawString(debugFont, debug05String, new Vector2(10, 50), Color.Black);
-            testbeat.Draw(this.spriteBatch);
+            if (testbeat != null)
+            {
+                testbeat.Draw(this.spriteBatch);
+            }
             //if (testBoolForRing)
             //{
             //    testBoolForRing = testring.Draw(this.spriteBatch);

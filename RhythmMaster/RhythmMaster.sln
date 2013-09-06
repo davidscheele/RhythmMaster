@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RhythmMaster", "RhythmMaster.csproj", "{409AD629-0304-48F6-B2EF-9CBBAD970830}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Windows Phone = Debug|Windows Phone
+		Release|Windows Phone = Release|Windows Phone
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{409AD629-0304-48F6-B2EF-9CBBAD970830}.Debug|Windows Phone.ActiveCfg = Debug|Windows Phone
+		{409AD629-0304-48F6-B2EF-9CBBAD970830}.Debug|Windows Phone.Build.0 = Debug|Windows Phone
+		{409AD629-0304-48F6-B2EF-9CBBAD970830}.Debug|Windows Phone.Deploy.0 = Debug|Windows Phone
+		{409AD629-0304-48F6-B2EF-9CBBAD970830}.Release|Windows Phone.ActiveCfg = Release|Windows Phone
+		{409AD629-0304-48F6-B2EF-9CBBAD970830}.Release|Windows Phone.Build.0 = Release|Windows Phone
+		{409AD629-0304-48F6-B2EF-9CBBAD970830}.Release|Windows Phone.Deploy.0 = Release|Windows Phone
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
