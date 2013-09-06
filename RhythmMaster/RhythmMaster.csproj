@@ -64,6 +64,7 @@
     <Reference Include="System.Net" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BeatTimerData.cs" />
     <Compile Include="Clickable.cs" />
     <Compile Include="Beat.cs" />
     <Compile Include="BeatRing.cs" />
