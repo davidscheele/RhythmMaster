@@ -23,7 +23,7 @@ namespace RhythmMaster
         String debug01String = "Startup!";
 
         Boolean testBoolForRing = true;
-        //String debug02String = "";
+        int debug02String = 0;
         //String debug03String = "";
         //String debug04String = "";
         //String debug05String = "";
@@ -31,6 +31,7 @@ namespace RhythmMaster
         Clickable testbeat;
         //BeatRing testring;
         
+        List<Clickable> clickableList = new List<Clickable>();
 
         public Game1()
         {
@@ -42,6 +43,10 @@ namespace RhythmMaster
 
             // Extend battery life under lock.
             InactiveSleepTime = TimeSpan.FromSeconds(1);
+
+            TouchPanel.EnabledGestures =
+                GestureType.Tap;
+
         }
 
         /// <summary>
@@ -67,7 +72,7 @@ namespace RhythmMaster
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             debugFont = Content.Load<SpriteFont>("Debugfont");
-
+            debug02String++;
             testbeat.LoadContent(this.Content);
             //testring.LoadContent(this.Content);
             // TODO: use this.Content to load your game content here
@@ -93,6 +98,21 @@ namespace RhythmMaster
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
+            while (TouchPanel.IsGestureAvailable)
+            {
+                GestureSample gesture = TouchPanel.ReadGesture();
+
+                switch (gesture.GestureType)
+                {
+                    case (GestureType.Tap):
+                        clickableList.Add(new Beat(gesture.Position));
+                        break;
+                        
+
+                }
+
+            }
+
             // TODO: Add your update logic here
 
             base.Update(gameTime);
@@ -108,15 +128,17 @@ namespace RhythmMaster
             spriteBatch.Begin();
             spriteBatch.DrawString(debugFont, debug01String, new Vector2(10, 10), Color.Black);
             spriteBatch.DrawString(debugFont, testbeat.Scale, new Vector2(10, 20), Color.Black);
-            //spriteBatch.DrawString(debugFont, debug03String, new Vector2(10, 30), Color.Black);
+            spriteBatch.DrawString(debugFont, debug02String.ToString(), new Vector2(10, 30), Color.Black);
             //spriteBatch.DrawString(debugFont, debug04String, new Vector2(10, 40), Color.Black);
             //spriteBatch.DrawString(debugFont, debug05String, new Vector2(10, 50), Color.Black);
+
             testbeat.Draw(this.spriteBatch);
             //if (testBoolForRing)
             //{
             //    testBoolForRing = testring.Draw(this.spriteBatch);
             //}
             // TODO: Add your drawing code here
+
             spriteBatch.End();
             base.Draw(gameTime);
         }
