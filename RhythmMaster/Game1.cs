@@ -22,6 +22,7 @@ namespace RhythmMaster
         SpriteFont debugFont;
         String debug01String = "Startup!";
         int timeSinceStart = 0;
+        int startTime = 1;
 
         Boolean testBoolForRing = true;
         //String debug02String = "";
@@ -180,20 +181,19 @@ namespace RhythmMaster
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-
-            timeSinceStart++;
+            int gameTimeSinceTheStart = (int) gameTime.TotalGameTime.TotalMilliseconds;
             GraphicsDevice.Clear(Color.CornflowerBlue);
             spriteBatch.Begin();
             //spriteBatch.DrawString(debugFont, debug01String, new Vector2(10, 10), Color.Black);
 
-            spriteBatch.DrawString(debugFont, timeSinceStart.ToString(), new Vector2(10, 20), Color.Black);
+            spriteBatch.DrawString(debugFont, gameTimeSinceTheStart.ToString(), new Vector2(10, 20), Color.Black);
             //spriteBatch.DrawString(debugFont, debug04String, new Vector2(10, 30), Color.Black);
             spriteBatch.DrawString(debugFont, debug04String, new Vector2(10, 40), Color.Black);
 
 
 
             Clickable testBeat;
-            if(BeatDictionary.TryGetValue(timeSinceStart, out testBeat))
+            if (BeatDictionary.TryGetValue(gameTimeSinceTheStart, out testBeat))
             {
                 testBeat.Draw(spriteBatch);
             }
