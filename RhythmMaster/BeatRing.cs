@@ -168,29 +168,6 @@ public class BeatRing
     {
         scale = scale - 0.02f;
     }
-    private void scaleUpAndDown()
-    {
-        if (scaleswitcher)
-        {
-            scale = scale + 0.1f;
-        }
-        else
-        {
-            scale = scale - 0.1f;
-        }
-
-        if (scale >= 2f)
-        {
-            scaleswitcher = false;
-        }
-        else
-        {
-            if (scale <= 0.1f)
-            {
-                scaleswitcher = true;
-            }
-        }
-    }
 
 
 

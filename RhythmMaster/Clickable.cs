@@ -7,6 +7,13 @@ public abstract class Clickable
 {
     private Boolean draw = true;
     private Vector2 position = new Vector2(0, 0);
+    public Boolean thisDraw
+    {
+        set
+        {
+            draw = value;
+        }
+    }
     public Vector2 Center
     {
         get
@@ -66,7 +73,6 @@ public abstract class Clickable
         }
     }
 
-    private Boolean scaleswitcher = true;
     public Texture2D Texture
     {
         get
@@ -105,7 +111,10 @@ public abstract class Clickable
         
 
 	}
-
+    public void thisIsTouched()
+    {
+        
+    }
     public void LoadContent(ContentManager _contentManager)
     {
         this.texture = _contentManager.Load<Texture2D>(assetName);
@@ -116,43 +125,21 @@ public abstract class Clickable
         if (this.draw)
         {
             _spriteBatch.Draw(texture, position, null, Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
+            if (!this.BeatRing.Draw(_spriteBatch))
+            {
+                this.draw = false;
+            }
         }
             
-            //this.scaleUpAndDown();
 
         this.Bounds = new Rectangle((int)this.TopLeft.X, (int)this.TopLeft.Y, (int)this.Width, (int)this.Height);
 
-        if (!this.BeatRing.Draw(_spriteBatch))
-        {
-            this.draw = false;
-        }
+
         
     }
 
 
-    private void scaleUpAndDown()
-    {
-        if (scaleswitcher)
-        {
-            scale = scale + 0.1f;
-        }
-        else
-        {
-            scale = scale - 0.1f;
-        }
 
-        if (scale >= 2f)
-        {
-            scaleswitcher = false;
-        }
-        else
-        {
-            if (scale <= 0.1f)
-            {
-                scaleswitcher = true;
-            }
-        }
-    }
 
 
 
