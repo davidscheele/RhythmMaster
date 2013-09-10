@@ -9,6 +9,7 @@ public class PointEffect
 {
     private Vector2 topLeftPosition;
     private Texture2D texture;
+    private int gameTimeOnInit;
 
     public Vector2 Center
     {
@@ -39,16 +40,27 @@ public class PointEffect
     }
 
 
-    public PointEffect(Texture2D _texture, SoundEffect _soundEffect, Vector2 _centerPoint)
+    public PointEffect(Texture2D _texture, SoundEffect _soundEffect, Vector2 _centerPoint, int _gameTimeOnInit)
     {
+        gameTimeOnInit = _gameTimeOnInit;
         this.Texture = _texture;
         this.Center = _centerPoint;
         _soundEffect.Play();
     }
 
-    public void Draw(SpriteBatch _spriteBatch)
+    public Boolean Draw(SpriteBatch _spriteBatch, int _actualGameTime)
     {
-        _spriteBatch.Draw(texture, topLeftPosition, Color.White);
+
+        if (gameTimeOnInit + 1000 > _actualGameTime)
+        {
+            _spriteBatch.Draw(texture, topLeftPosition, Color.White);
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+
     }
 
 

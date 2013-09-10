@@ -23,7 +23,7 @@ namespace RhythmMaster
         String debug01String = "Startup!";
         int timeSinceStart = 0;
         int startTime = 1;
-        int gameTimeSinceTheStart = 0;
+        int gameTimeSinceStart = 0;
 
         Boolean testBoolForRing = true;
         //String debug02String = "";
@@ -167,13 +167,13 @@ namespace RhythmMaster
             Clickable testBeat;
             foreach (int key in BeatDictionary.Keys)
             {
-                if (key <= gameTimeSinceTheStart)
+                if (key <= gameTimeSinceStart)
                 {
                     BeatDictionary.TryGetValue(key, out testBeat);
 
                         if (testBeat.Bounds.Intersects(new Rectangle((int)tapPosition.X, (int)tapPosition.Y, 1, 1)))
                         {
-                            PointGenerator.generatePointEffect(testBeat.Center, testBeat.BeatRing.Scale);
+                            PointGenerator.generatePointEffect(testBeat.Center, testBeat.BeatRing.Scale, gameTimeSinceStart);
                             testBeat.thisDraw = false;
                         }
 
@@ -192,26 +192,26 @@ namespace RhythmMaster
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            gameTimeSinceTheStart = (int) gameTime.TotalGameTime.TotalMilliseconds;
+            gameTimeSinceStart = (int) gameTime.TotalGameTime.TotalMilliseconds;
             
             GraphicsDevice.Clear(Color.CornflowerBlue);
             spriteBatch.Begin();
             //spriteBatch.DrawString(debugFont, debug01String, new Vector2(10, 10), Color.Black);
 
-            spriteBatch.DrawString(debugFont, gameTimeSinceTheStart.ToString(), new Vector2(10, 20), Color.Black);
+            spriteBatch.DrawString(debugFont, gameTimeSinceStart.ToString(), new Vector2(10, 20), Color.Black);
             spriteBatch.DrawString(debugFont, startTime.ToString(), new Vector2(10, 30), Color.Black);
             spriteBatch.DrawString(debugFont, debug04String, new Vector2(10, 40), Color.Black);
 
-            PointGenerator.Draw(spriteBatch);
+            PointGenerator.Draw(spriteBatch, gameTimeSinceStart);
 
-            Clickable testBeat;
+            Clickable tempClickable;
 
             foreach (int key in BeatDictionary.Keys)
             {
-                if (key <= gameTimeSinceTheStart)
+                if (key <= gameTimeSinceStart)
                 {
-                    BeatDictionary.TryGetValue(key, out testBeat);
-                    testBeat.Draw(spriteBatch);
+                    BeatDictionary.TryGetValue(key, out tempClickable);
+                    tempClickable.Draw(spriteBatch);
                 }
                 else
                 {
