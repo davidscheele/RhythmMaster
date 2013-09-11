@@ -12,9 +12,7 @@ using Microsoft.Xna.Framework.Media;
 
 namespace RhythmMaster
 {
-    /// <summary>
-    /// This is the main type for your game
-    /// </summary>
+
     public class Game1 : Microsoft.Xna.Framework.Game
     {
         GraphicsDeviceManager graphics;
@@ -26,23 +24,16 @@ namespace RhythmMaster
         int gameTimeSinceStart = 0;
 
         Boolean testBoolForRing = true;
-        //String debug02String = "";
-        //String debug03String = "";
         String debug04String = "";
-        //String debug05String = "";
 
         Dictionary<int, Clickable> BeatDictionary = new Dictionary<int,Clickable>();
 
        List<BeatTimerData> BeatTimerList = new List<BeatTimerData>();
-
-       //List<Clickable> BeatList = new List<Clickable>();
-
-        Clickable testbeat;
-        //BeatRing testring;
         
 
         public Game1()
         {
+
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
 
@@ -61,27 +52,14 @@ namespace RhythmMaster
             InactiveSleepTime = TimeSpan.FromSeconds(1);
         }
 
-        /// <summary>
-        /// Allows the game to perform any initialization it needs to before starting to run.
-        /// This is where it can query for any required services and load any non-graphic
-        /// related content.  Calling base.Initialize will enumerate through any components
-        /// and initialize them as well.
-        /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
-            testbeat = new Beat(new Vector2(200, 100));
-            //testring = new BeatRing(new Vector2(100, 100));
             base.Initialize();
         }
 
-        /// <summary>
-        /// LoadContent will be called once per game and is the place to load
-        /// all of your content.
-        /// </summary>
+
         protected override void LoadContent()
         {
-            // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             debugFont = Content.Load<SpriteFont>("Debugfont");
             PointGenerator.Load(this.Content);
@@ -97,28 +75,15 @@ namespace RhythmMaster
                 kvp.Value.LoadContent(this.Content);
             }
 
-            //testbeat.LoadContent(this.Content);
-            //testring.LoadContent(this.Content);
-            // TODO: use this.Content to load your game content here
         }
 
-        /// <summary>
-        /// UnloadContent will be called once per game and is the place to unload
-        /// all content.
-        /// </summary>
         protected override void UnloadContent()
         {
             // TODO: Unload any non ContentManager content here
         }
 
-        /// <summary>
-        /// Allows the game to run logic such as updating the world,
-        /// checking for collisions, gathering input, and playing audio.
-        /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            // Allows the game to exit
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
@@ -130,35 +95,9 @@ namespace RhythmMaster
                 {
                     case (GestureType.Tap):
                         checkIntersect(gesture.Position);
-                        //if (checkIntersect(gesture.Position))
-                        //{
-                        //    if (testbeat != null)
-                        //    {
-                        //        if (testbeat.BeatRing.Scale > 0.6f || testbeat.BeatRing.Scale < 0.4f)
-                        //        {
-                        //            debug04String = "FAIL!!!!";
-                        //            testbeat = null;
-                        //        }
-                        //        else
-                        //        {
-                        //            debug04String = "SPOT ON!!!";
-                        //            testbeat = null;
-                        //        }
-                        //    }
-                        //}
                         break;
-
                 }
-
             }
-
-            // TODO: Add your update logic here
-
-            //foreach (BeatTimerData btd in BeatTimerList)
-            //{
-            //    debug04String = btd.Timestamp + ";" + btd.StartPosition + ";" + btd.EndPosition + ";" + btd.IsSlider + ";" + btd.IsSpinner;
-            //}
-
             base.Update(gameTime);
         }
 
@@ -186,17 +125,12 @@ namespace RhythmMaster
             }
         }
 
-        /// <summary>
-        /// This is called when the game should draw itself.
-        /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
             gameTimeSinceStart = (int) gameTime.TotalGameTime.TotalMilliseconds;
             
             GraphicsDevice.Clear(Color.CornflowerBlue);
             spriteBatch.Begin();
-            //spriteBatch.DrawString(debugFont, debug01String, new Vector2(10, 10), Color.Black);
 
             spriteBatch.DrawString(debugFont, gameTimeSinceStart.ToString(), new Vector2(10, 20), Color.Black);
             spriteBatch.DrawString(debugFont, startTime.ToString(), new Vector2(10, 30), Color.Black);
