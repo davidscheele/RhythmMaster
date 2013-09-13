@@ -124,7 +124,7 @@ public abstract class Clickable
     {
         if (this.draw)
         {
-            _spriteBatch.Draw(texture, position, null, Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
+            _spriteBatch.Draw(texture, position, null, Color.Yellow, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
             if (!this.BeatRing.Draw(_spriteBatch))
             {
                 this.draw = false;
