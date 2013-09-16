@@ -65,12 +65,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BeatTimerData.cs" />
+    <Compile Include="ReturnToMainMenuButton.cs" />
+    <Compile Include="CreateBeatmapsButton.cs" />
+    <Compile Include="NavigationButton.cs" />
+    <Compile Include="PlayBeatmapsButton.cs" />
+    <Compile Include="XmlConverter.cs" />
     <Compile Include="PointGenerator.cs" />
     <Compile Include="Clickable.cs" />
     <Compile Include="Beat.cs" />
     <Compile Include="BeatRing.cs" />
     <Compile Include="PointEffect.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <None Include="ClassDiagram1.cd" />
     <None Include="Properties\AppManifest.xml">
       <XnaPlatformSpecific>true</XnaPlatformSpecific>
     </None>
