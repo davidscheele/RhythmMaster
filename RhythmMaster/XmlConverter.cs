@@ -18,12 +18,12 @@ using Microsoft.Xna.Framework;
 
         public void saveBeatmap(List<BeatTimerData> beatTimerList, String filename)
         {
-            XDocument xDoc = new XDocument(new XDeclaration("1.0", "UTF-8", null), 
-                                new XElement("Root"
-                                    ));
+            XDocument xDoc = new XDocument(
+                new XDeclaration("1.0", "UTF-8", null), 
+                    new XElement("Root")
+            );
             foreach (BeatTimerData btd in beatTimerList)
             {
-
                 XElement child = new XElement("beat");
 
                 child.Add(new XElement("timestamp", btd.Timestamp));
@@ -34,17 +34,10 @@ using Microsoft.Xna.Framework;
                 child.Add(new XElement("isslider", btd.IsSlider));
                 child.Add(new XElement("isspinner", btd.IsSpinner));
 
-
-
                 xDoc.Root.Add(child);
-
-
-
             }
             using (var storage = IsolatedStorageFile.GetUserStoreForApplication())
             {
-
-                //storage.DeleteFile(filename + ".xml");   
                 using (Stream stream = storage.CreateFile(filename + ".xml"))
                 {
                     xDoc.Save(stream);

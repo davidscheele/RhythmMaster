@@ -9,6 +9,16 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
 using Microsoft.Xna.Framework.Media;
 
+//Testlibs
+using System.IO;
+using System.IO.IsolatedStorage;
+using System.Xml;
+using System.Xml.Linq;
+using System.Xml.Serialization;
+using System.Diagnostics;
+using System.Text;
+//Testlibs
+
 namespace RhythmMaster
 {
 
@@ -19,6 +29,8 @@ namespace RhythmMaster
             MainMenu,
             BeatmapCreator,
             Playing,
+            LoadMenu,
+            SaveMenu,
         }
 
         NavigationButton playBeatmapsButton = new PlayBeatmapsButton(new Vector2(100, 100));
@@ -40,7 +52,6 @@ namespace RhythmMaster
         int gameTimeSincePlaying = 0;
         int gameTimeSinceCreating = 0;
 
-        int timeSinceBeatAppeared = 0;
         int timeBeatAppeared = 0;
 
         String debug04String = "";
@@ -62,7 +73,8 @@ namespace RhythmMaster
             BeatTimerList.Add(new BeatTimerData(3500, new Vector2(300, 200), new Vector2(0,0), false, false));
             BeatTimerList.Add(new BeatTimerData(5000, new Vector2(400, 200), new Vector2(0,0), false, false));
 
-
+            debugMessageXMLFiles();
+            
             // Frame rate is 30 fps by default for Windows Phone.
             TargetElapsedTime = TimeSpan.FromTicks(333333);
 
@@ -128,8 +140,10 @@ namespace RhythmMaster
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
+
+
             switch (CurrentGameState){
-                case GameState.MainMenu:
+                case GameState.MainMenu:                                            //Check for Clicks in Main Menu
                     while (TouchPanel.IsGestureAvailable)
                     {
                         GestureSample gesture = TouchPanel.ReadGesture();
@@ -153,7 +167,7 @@ namespace RhythmMaster
                     }
                     break;
 
-                case GameState.Playing:
+                case GameState.Playing:                                             //Check for Beat klicks
                     while (TouchPanel.IsGestureAvailable)
                     {
                         GestureSample gesture = TouchPanel.ReadGesture();
@@ -162,13 +176,12 @@ namespace RhythmMaster
                         {
                             case (GestureType.Tap):
                                 checkIntersect(gesture.Position);
-                                notYetTouched = false;
                                 break;
                         }
                     }
                     break;
 
-                case GameState.BeatmapCreator:
+                case GameState.BeatmapCreator:                                      //Check for Taps to create Beatmap
                     while (TouchPanel.IsGestureAvailable)
                     {
                         GestureSample gesture = TouchPanel.ReadGesture();
@@ -179,10 +192,15 @@ namespace RhythmMaster
                                 if (returnToMainMenuButton.checkClick(gesture))
                                 {
                                     //MediaPlayer.Stop();
-                                    xmlConverter.saveBeatmap(BeatTimerList, "test2");
-                                    this.BeatTimerList = xmlConverter.loadBeatmapXML("test2");
-                                    this.CurrentGameState = GameState.MainMenu;
-                                    this.LoadLateContent();
+                                    //this.BeatTimerList = xmlConverter.loadBeatmapXML("test2");
+                                    this.CurrentGameState = GameState.SaveMenu;
+                                    Guide.BeginShowKeyboardInput(
+                                        PlayerIndex.One,
+                                        "Saving Beatmap",
+                                        "Title of Beatmap",
+                                        "",
+                                        saveBeatmapAs, null);
+                                    //this.LoadLateContent();
                                 }
                                 else
                                 {
@@ -267,10 +285,11 @@ namespace RhythmMaster
 
                 case GameState.BeatmapCreator:
                     gameTimeSinceCreating = (int)gameTime.TotalGameTime.TotalMilliseconds - gameTimeSinceStart;
-                    //spriteBatch.DrawString(debugFont, gameTimeSinceStart.ToString(), new Vector2(10, 10), Color.Black);
-                    //spriteBatch.DrawString(debugFont, gameTimeSinceCreating.ToString(), new Vector2(10, 20), Color.Black);
-
                     returnToMainMenuButton.Draw(spriteBatch);
+                    break;
+
+                case GameState.SaveMenu:
+                    
                     break;
             }
 
@@ -278,5 +297,24 @@ namespace RhythmMaster
             spriteBatch.End();
             base.Draw(gameTime);
         }
+
+        private void saveBeatmapAs(IAsyncResult r)
+        {
+            xmlConverter.saveBeatmap(BeatTimerList, Guide.EndShowKeyboardInput(r));
+            CurrentGameState = GameState.MainMenu;
+        }
+
+        private void debugMessageXMLFiles()
+        {
+            using (var storage = IsolatedStorageFile.GetUserStoreForApplication())
+            {
+                String[] filenames = storage.GetFileNames("*.xml");
+                foreach (String filename in filenames)
+                {
+                    Debug.WriteLine(filename);
+                }
+            }
+        }
+
     }
 }
