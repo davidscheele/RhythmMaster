@@ -64,6 +64,7 @@
     <Reference Include="System.Net" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BeatmapCreator.cs" />
     <Compile Include="BeatTimerData.cs" />
     <Compile Include="ReturnToMainMenuButton.cs" />
     <Compile Include="CreateBeatmapsButton.cs" />

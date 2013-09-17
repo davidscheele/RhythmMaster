@@ -25,14 +25,23 @@ namespace RhythmMaster
         NavigationButton createBeatmapsButton = new CreateBeatmapsButton(new Vector2(400, 300));
         NavigationButton returnToMainMenuButton = new ReturnToMainMenuButton(new Vector2(675, 420));
         GameState CurrentGameState = GameState.MainMenu;
+        XmlConverter xmlConverter = new XmlConverter();
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         SpriteFont debugFont;
+
+        Song munchymonk;
+
+        Boolean beatAppeared = false;
+        Boolean notYetTouched = true;
 
         int startTime = 1;
         int gameTimeSinceStart = 0;
         int gameTimeSincePlaying = 0;
         int gameTimeSinceCreating = 0;
+
+        int timeSinceBeatAppeared = 0;
+        int timeBeatAppeared = 0;
 
         String debug04String = "";
 
@@ -95,6 +104,8 @@ namespace RhythmMaster
             createBeatmapsButton.Load(this.Content);
             returnToMainMenuButton.Load(this.Content);
 
+            munchymonk = Content.Load<Song>("munchymonk");
+
             foreach (BeatTimerData btd in BeatTimerList)
             {
                 BeatDictionary.Add(btd.Timestamp, new Beat(btd.StartPosition));
@@ -130,10 +141,12 @@ namespace RhythmMaster
                                 {
                                     this.CurrentGameState = GameState.BeatmapCreator;
                                     BeatTimerList = new List<BeatTimerData>();
+                                    //MediaPlayer.Play(munchymonk);
                                 };
                                 if(playBeatmapsButton.checkClick(gesture))
                                 {
                                     this.CurrentGameState = GameState.Playing;
+                                    //MediaPlayer.Play(munchymonk);
                                 };
                                 break;
                         }
@@ -141,7 +154,18 @@ namespace RhythmMaster
                     break;
 
                 case GameState.Playing:
+                    while (TouchPanel.IsGestureAvailable)
+                    {
+                        GestureSample gesture = TouchPanel.ReadGesture();
 
+                        switch (gesture.GestureType)
+                        {
+                            case (GestureType.Tap):
+                                checkIntersect(gesture.Position);
+                                notYetTouched = false;
+                                break;
+                        }
+                    }
                     break;
 
                 case GameState.BeatmapCreator:
@@ -154,12 +178,15 @@ namespace RhythmMaster
                             case (GestureType.Tap):
                                 if (returnToMainMenuButton.checkClick(gesture))
                                 {
+                                    //MediaPlayer.Stop();
+                                    xmlConverter.saveBeatmap(BeatTimerList, "test2");
+                                    this.BeatTimerList = xmlConverter.loadBeatmapXML("test2");
                                     this.CurrentGameState = GameState.MainMenu;
                                     this.LoadLateContent();
                                 }
                                 else
                                 {
-                                    BeatTimerList.Add(new BeatTimerData(gameTimeSinceCreating, gesture.Position, new Vector2(0, 0), false, false));
+                                    BeatTimerList.Add(new BeatTimerData(gameTimeSinceCreating - 1500, gesture.Position, new Vector2(0, 0), false, false));
                                 };
                              
                                 break;
@@ -167,17 +194,7 @@ namespace RhythmMaster
                     }
                     break;
             }
-            while (TouchPanel.IsGestureAvailable)
-            {
-                GestureSample gesture = TouchPanel.ReadGesture();
-
-                switch (gesture.GestureType)
-                {
-                    case (GestureType.Tap):
-                        checkIntersect(gesture.Position);
-                        break;
-                }
-            }
+            
             base.Update(gameTime);
         }
 
@@ -221,12 +238,12 @@ namespace RhythmMaster
                     break;
 
                 case GameState.Playing:
-
+                    //if (beatAppeared && notYetTouched) { timeSinceBeatAppeared = (int)gameTime.TotalGameTime.TotalMilliseconds - timeBeatAppeared; }
                     gameTimeSincePlaying = (int)gameTime.TotalGameTime.TotalMilliseconds - gameTimeSinceStart;
-                    spriteBatch.DrawString(debugFont, gameTimeSinceStart.ToString(), new Vector2(10, 10), Color.Black);
-                    spriteBatch.DrawString(debugFont, gameTimeSincePlaying.ToString(), new Vector2(10, 20), Color.Black);
-                    spriteBatch.DrawString(debugFont, startTime.ToString(), new Vector2(10, 40), Color.Black);
-                    spriteBatch.DrawString(debugFont, debug04String, new Vector2(10, 50), Color.Black);
+                    //spriteBatch.DrawString(debugFont, gameTimeSinceStart.ToString(), new Vector2(10, 10), Color.Black);
+                    //spriteBatch.DrawString(debugFont, gameTimeSincePlaying.ToString(), new Vector2(10, 20), Color.Black);
+                    //spriteBatch.DrawString(debugFont, timeSinceBeatAppeared.ToString(), new Vector2(10, 40), Color.Black);
+                    //spriteBatch.DrawString(debugFont, debug04String, new Vector2(10, 50), Color.Black);
 
                     PointGenerator.Draw(spriteBatch, gameTimeSincePlaying);
 
@@ -238,18 +255,20 @@ namespace RhythmMaster
                         {
                             BeatDictionary.TryGetValue(key, out tempClickable);
                             tempClickable.Draw(spriteBatch);
+                            if (!beatAppeared) { beatAppeared = true; timeBeatAppeared = gameTimeSincePlaying + gameTimeSinceStart;}
                         }
                         else
                         {
                             break;
                         }
                     }
+
                     break;
 
                 case GameState.BeatmapCreator:
                     gameTimeSinceCreating = (int)gameTime.TotalGameTime.TotalMilliseconds - gameTimeSinceStart;
-                    spriteBatch.DrawString(debugFont, gameTimeSinceStart.ToString(), new Vector2(10, 10), Color.Black);
-                    spriteBatch.DrawString(debugFont, gameTimeSinceCreating.ToString(), new Vector2(10, 20), Color.Black);
+                    //spriteBatch.DrawString(debugFont, gameTimeSinceStart.ToString(), new Vector2(10, 10), Color.Black);
+                    //spriteBatch.DrawString(debugFont, gameTimeSinceCreating.ToString(), new Vector2(10, 20), Color.Black);
 
                     returnToMainMenuButton.Draw(spriteBatch);
                     break;
