@@ -66,6 +66,14 @@
   <ItemGroup>
     <Compile Include="BeatmapCreator.cs" />
     <Compile Include="BeatTimerData.cs" />
+    <Compile Include="GameState.cs" />
+    <Compile Include="LoadMenu\LoadSelectionButton.cs" />
+    <Compile Include="LoadMenu\ListBackwardButton.cs" />
+    <Compile Include="LoadMenu\ListForwardButton.cs" />
+    <Compile Include="LoadMenu\BackButton.cs" />
+    <Compile Include="LoadMenu\NextButton.cs" />
+    <Compile Include="LoadMenu\LoadMenu.cs" />
+    <Compile Include="LoadMenu\MainMenuButton.cs" />
     <Compile Include="ReturnToMainMenuButton.cs" />
     <Compile Include="CreateBeatmapsButton.cs" />
     <Compile Include="NavigationButton.cs" />
@@ -102,6 +110,7 @@
       <XnaReferenceType>Content</XnaReferenceType>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />
   <!--

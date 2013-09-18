@@ -15,4 +15,11 @@ Content\playbeatmapsbutton.xnb
 Content\returntomainmenubutton.xnb
 Content\returntomainmenusmallbutton.xnb
 Content\munchymonk.xnb
+Content\LoadMenu\backbutton.xnb
+Content\LoadMenu\listbackwardbutton.xnb
+Content\LoadMenu\listforwardbutton.xnb
+Content\LoadMenu\mainmenubutton.xnb
+Content\LoadMenu\nextbutton.xnb
+Content\LoadMenu\LoadMenuFont.xnb
+Content\LoadMenu\loadselectionbutton.xnb
 Content\munchymonk.wma

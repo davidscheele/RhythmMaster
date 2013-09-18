@@ -24,15 +24,6 @@ namespace RhythmMaster
 
     public class Game1 : Microsoft.Xna.Framework.Game
     {
-        enum GameState
-        {
-            MainMenu,
-            BeatmapCreator,
-            Playing,
-            LoadMenu,
-            SaveMenu,
-        }
-
         NavigationButton playBeatmapsButton = new PlayBeatmapsButton(new Vector2(100, 100));
         NavigationButton createBeatmapsButton = new CreateBeatmapsButton(new Vector2(400, 300));
         NavigationButton returnToMainMenuButton = new ReturnToMainMenuButton(new Vector2(675, 420));
@@ -41,6 +32,7 @@ namespace RhythmMaster
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         SpriteFont debugFont;
+        LoadMenu loadMenu;
 
         Song munchymonk;
 
@@ -109,6 +101,7 @@ namespace RhythmMaster
 
         protected override void LoadContent()
         {
+            
             spriteBatch = new SpriteBatch(GraphicsDevice);
             debugFont = Content.Load<SpriteFont>("Debugfont");
             PointGenerator.Load(this.Content);
@@ -159,7 +152,8 @@ namespace RhythmMaster
                                 };
                                 if(playBeatmapsButton.checkClick(gesture))
                                 {
-                                    this.CurrentGameState = GameState.Playing;
+                                    this.CurrentGameState = GameState.LoadMenu;
+                                    loadMenu = new LoadMenu(this.Content);
                                     //MediaPlayer.Play(munchymonk);
                                 };
                                 break;
@@ -249,7 +243,7 @@ namespace RhythmMaster
             {
                 case GameState.MainMenu:
                     spriteBatch.DrawString(debugFont, gameTimeSinceStart.ToString(), new Vector2(10, 10), Color.Black);
-                    spriteBatch.DrawString(debugFont, gameTimeSincePlaying.ToString(), new Vector2(10, 20), Color.Black);
+                    spriteBatch.DrawString(debugFont, gameTimeSincePlaying.ToString(), new Vector2(10, 40), Color.Black);
                     playBeatmapsButton.Draw(spriteBatch);
                     createBeatmapsButton.Draw(spriteBatch);
                     gameTimeSinceStart = (int) gameTime.TotalGameTime.TotalMilliseconds;
@@ -290,6 +284,10 @@ namespace RhythmMaster
 
                 case GameState.SaveMenu:
                     
+                    break;
+
+                case GameState.LoadMenu:
+                    loadMenu.Draw(spriteBatch);
                     break;
             }
 

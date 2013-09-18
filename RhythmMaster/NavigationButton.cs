@@ -11,8 +11,6 @@ namespace RhythmMaster
 {
     public abstract class NavigationButton
     {
-       
-
         Color color;
         public Color Color
         {
@@ -97,7 +95,6 @@ namespace RhythmMaster
                 bounds = value;
             }
         }
-
         public NavigationButton()
 	{
 
@@ -111,6 +108,12 @@ namespace RhythmMaster
     {
             _spriteBatch.Draw(texture, position, null, color);
             this.Bounds = new Rectangle((int)this.TopLeft.X, (int)this.TopLeft.Y, (int)this.Width, (int)this.Height);
+    }
+    public void Draw(SpriteBatch _spriteBatch, Vector2 _position)
+    {
+        this.TopLeft = _position;
+        _spriteBatch.Draw(texture, _position, null, color);
+        this.Bounds = new Rectangle((int)this.TopLeft.X, (int)this.TopLeft.Y, (int)this.Width, (int)this.Height);
     }
     public Boolean checkClick(GestureSample gesture)
     {
