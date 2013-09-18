@@ -115,6 +115,10 @@ namespace RhythmMaster
         _spriteBatch.Draw(texture, _position, null, color);
         this.Bounds = new Rectangle((int)this.TopLeft.X, (int)this.TopLeft.Y, (int)this.Width, (int)this.Height);
     }
+    public void makeNonClickable()
+    {
+        this.Bounds = new Rectangle(0, 0, 0, 0);
+    }
     public Boolean checkClick(GestureSample gesture)
     {
         if (this.Bounds.Intersects(new Rectangle((int)gesture.Position.X, (int)gesture.Position.Y, 1, 1)))

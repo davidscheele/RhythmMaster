@@ -160,7 +160,19 @@ namespace RhythmMaster
                         }
                     }
                     break;
+                case GameState.LoadMenu:
+                    while (TouchPanel.IsGestureAvailable)
+                    {
+                        GestureSample gesture = TouchPanel.ReadGesture();
 
+                        switch (gesture.GestureType)
+                        {
+                            case (GestureType.Tap):
+                                CurrentGameState = loadMenu.checkClick(gesture.Position);
+                                break;
+                        }
+                    }
+                    break;
                 case GameState.Playing:                                             //Check for Beat klicks
                     while (TouchPanel.IsGestureAvailable)
                     {

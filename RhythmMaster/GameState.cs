@@ -5,7 +5,7 @@ using System.Text;
 
 namespace RhythmMaster
 {
-    enum GameState
+    public enum GameState
     {
         MainMenu,
         BeatmapCreator,
