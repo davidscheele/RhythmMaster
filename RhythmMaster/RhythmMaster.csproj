@@ -67,6 +67,8 @@
     <Compile Include="BeatmapCreator.cs" />
     <Compile Include="BeatTimerData.cs" />
     <Compile Include="GameState.cs" />
+    <Compile Include="LoadMenu\SongLoadMenu.cs" />
+    <Compile Include="LoadMenu\XMLLoadMenu.cs" />
     <Compile Include="LoadMenu\LoadSelectionButton.cs" />
     <Compile Include="LoadMenu\ListBackwardButton.cs" />
     <Compile Include="LoadMenu\ListForwardButton.cs" />

@@ -15,6 +15,11 @@ using Microsoft.Xna.Framework.Audio;
         static Texture2D halfpointsTexture;
         static Texture2D nopointsTexture;
 
+        static String xmltestname;
+        public static void settestxml(String xml) 
+        { xmltestname = xml; }
+        public static String gettestxml() 
+        { return xmltestname; }
 
         static List<PointEffect> pointEffectList = new List<PointEffect>();
         static Dictionary<int, PointEffect> pointEffectsDictionary = new Dictionary<int, PointEffect>();

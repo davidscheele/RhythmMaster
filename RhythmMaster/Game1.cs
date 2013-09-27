@@ -148,19 +148,18 @@ namespace RhythmMaster
                                 {
                                     this.CurrentGameState = GameState.BeatmapCreator;
                                     BeatTimerList = new List<BeatTimerData>();
-                                    //MediaPlayer.Play(munchymonk);
+                                    MediaPlayer.Play(munchymonk);
                                 };
                                 if(playBeatmapsButton.checkClick(gesture))
                                 {
-                                    this.CurrentGameState = GameState.LoadMenu;
-                                    loadMenu = new LoadMenu(this.Content);
-                                    //MediaPlayer.Play(munchymonk);
+                                    this.CurrentGameState = GameState.XMLLoadMenu;
+                                    loadMenu = new XMLLoadMenu(this.Content);
                                 };
                                 break;
                         }
                     }
                     break;
-                case GameState.LoadMenu:
+                case GameState.XMLLoadMenu:
                     while (TouchPanel.IsGestureAvailable)
                     {
                         GestureSample gesture = TouchPanel.ReadGesture();
@@ -168,7 +167,19 @@ namespace RhythmMaster
                         switch (gesture.GestureType)
                         {
                             case (GestureType.Tap):
-                                CurrentGameState = loadMenu.checkClick(gesture.Position);
+                                switch (loadMenu.checkClick(gesture.Position))
+                                {
+                                    case GameState.Playing:
+
+                                        this.BeatTimerList = xmlConverter.loadBeatmapXML(PointGenerator.gettestxml());
+                                        this.LoadLateContent();
+                                        MediaPlayer.Play(munchymonk);
+                                        CurrentGameState = GameState.Playing;
+
+
+                                        break;
+                                }
+                                
                                 break;
                         }
                     }
@@ -197,7 +208,8 @@ namespace RhythmMaster
                             case (GestureType.Tap):
                                 if (returnToMainMenuButton.checkClick(gesture))
                                 {
-                                    //MediaPlayer.Stop();
+                                    MediaPlayer.Stop();
+                                    
                                     //this.BeatTimerList = xmlConverter.loadBeatmapXML("test2");
                                     this.CurrentGameState = GameState.SaveMenu;
                                     Guide.BeginShowKeyboardInput(
@@ -210,7 +222,8 @@ namespace RhythmMaster
                                 }
                                 else
                                 {
-                                    BeatTimerList.Add(new BeatTimerData(gameTimeSinceCreating - 1500, gesture.Position, new Vector2(0, 0), false, false));
+                                    //BeatTimerList.Add(new BeatTimerData(gameTimeSinceCreating - 1500, gesture.Position, new Vector2(0, 0), false, false));
+                                    BeatTimerList.Add(new BeatTimerData(MediaPlayer.PlayPosition.Milliseconds - 1500, gesture.Position, new Vector2(0, 0), false, false));
                                 };
                              
                                 break;
@@ -298,7 +311,7 @@ namespace RhythmMaster
                     
                     break;
 
-                case GameState.LoadMenu:
+                case GameState.XMLLoadMenu:
                     loadMenu.Draw(spriteBatch);
                     break;
             }

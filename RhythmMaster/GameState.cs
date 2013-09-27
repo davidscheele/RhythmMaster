@@ -10,7 +10,8 @@ namespace RhythmMaster
         MainMenu,
         BeatmapCreator,
         Playing,
-        LoadMenu,
+        XMLLoadMenu,
+        SongLoadMenu,
         SaveMenu,
     }
 }
