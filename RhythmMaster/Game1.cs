@@ -169,17 +169,49 @@ namespace RhythmMaster
                             case (GestureType.Tap):
                                 switch (loadMenu.checkClick(gesture.Position))
                                 {
-                                    case GameState.Playing:
+                                    case GameState.SongLoadMenu:
+                                        this.CurrentGameState = GameState.SongLoadMenu;
+                                        loadMenu = new SongLoadMenu(this.Content);
+                                        break;
 
+                                    case GameState.MainMenu:
+                                        this.CurrentGameState = GameState.MainMenu;
+                                        break;
+                                }
+                                
+                                break;
+                        }
+                    }
+                    break;
+
+                case GameState.SongLoadMenu:
+                    while (TouchPanel.IsGestureAvailable)
+                    {
+                        GestureSample gesture = TouchPanel.ReadGesture();
+
+                        switch (gesture.GestureType)
+                        {
+                            case (GestureType.Tap):
+                                switch (loadMenu.checkClick(gesture.Position))
+                                {
+
+                                    case GameState.Playing:
                                         this.BeatTimerList = xmlConverter.loadBeatmapXML(PointGenerator.gettestxml());
                                         this.LoadLateContent();
                                         MediaPlayer.Play(munchymonk);
                                         CurrentGameState = GameState.Playing;
+                                        break;
 
+                                    case GameState.XMLLoadMenu:
+                                        this.CurrentGameState = GameState.XMLLoadMenu;
+                                        loadMenu = new XMLLoadMenu(this.Content);
+                                        break;
 
+                                    case GameState.MainMenu:
+                                        this.CurrentGameState = GameState.MainMenu;
                                         break;
                                 }
-                                
+
                                 break;
                         }
                     }
@@ -312,6 +344,10 @@ namespace RhythmMaster
                     break;
 
                 case GameState.XMLLoadMenu:
+                    loadMenu.Draw(spriteBatch);
+                    break;
+
+                case GameState.SongLoadMenu:
                     loadMenu.Draw(spriteBatch);
                     break;
             }

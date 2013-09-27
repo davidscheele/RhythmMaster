@@ -19,7 +19,6 @@ namespace RhythmMaster
         String[] pageContents;
         SpriteFont font;
         NavigationButton mainMenuButton = new MainMenuButton(new Vector2(30, 400));
-        NavigationButton backButton = new BackButton(new Vector2(160, 400));
         NavigationButton nextButton = new NextButton(new Vector2(290, 400));
         NavigationButton listBackwardButton = new ListBackwardButton(new Vector2(420, 400));
         NavigationButton listForwardButton = new ListForwardButton(new Vector2(550, 400));
@@ -36,7 +35,6 @@ namespace RhythmMaster
             loadSelectionButtonTexture = contentManager.Load<Texture2D>("LoadMenu/loadselectionbutton");
             mainMenuButton.Load(contentManager);
             nextButton.Load(contentManager);
-            backButton.Load(contentManager);
             listForwardButton.Load(contentManager);
             listBackwardButton.Load(contentManager);
 
@@ -99,8 +97,8 @@ namespace RhythmMaster
                 
             if (tap.Intersects(nextButton.Bounds))
             {
-                PointGenerator.settestxml(selectedBeatmap + ".xml");
-                return GameState.Playing;
+                PointGenerator.settestxml(selectedBeatmap);
+                return GameState.SongLoadMenu;
             }
                     
             if (tap.Intersects(listBackwardButton.Bounds))

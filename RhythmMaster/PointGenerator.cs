@@ -21,6 +21,12 @@ using Microsoft.Xna.Framework.Audio;
         public static String gettestxml() 
         { return xmltestname; }
 
+        static String songtestname;
+        public static void settestsong(String song)
+        { songtestname = song; }
+        public static String gettestsong()
+        { return songtestname; }
+
         static List<PointEffect> pointEffectList = new List<PointEffect>();
         static Dictionary<int, PointEffect> pointEffectsDictionary = new Dictionary<int, PointEffect>();
 

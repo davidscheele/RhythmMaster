@@ -15,7 +15,7 @@ namespace RhythmMaster
     {
        
 
-        String[] xmlNames;
+        String[] songNames;
         String[] pageContents;
         SpriteFont font;
         NavigationButton mainMenuButton = new MainMenuButton(new Vector2(30, 400));
@@ -25,7 +25,7 @@ namespace RhythmMaster
         NavigationButton listForwardButton = new ListForwardButton(new Vector2(550, 400));
         Texture2D loadSelectionButtonTexture;
         Dictionary<String, NavigationButton> loadSelectionButtonList;
-        String selectedBeatmap = "000000";
+        String selectedSong = "000000";
         NavigationButton selectedNavButton;
         int Page = 0;
         Boolean test = true;
@@ -42,10 +42,10 @@ namespace RhythmMaster
             
             using (var storage = IsolatedStorageFile.GetUserStoreForApplication())
             {
-                xmlNames = storage.GetFileNames("*.xml");
+                songNames = storage.GetFileNames("*.mp3");
             }
             loadSelectionButtonList = new Dictionary<string,NavigationButton>();
-            foreach (String name in xmlNames)
+            foreach (String name in songNames)
             {
                 loadSelectionButtonList.Add(name, new LoadSelectionButton(loadSelectionButtonTexture));
             }
@@ -58,13 +58,12 @@ namespace RhythmMaster
             mainMenuButton.Draw(spriteBatch);
             if (selectedNavButton != null) nextButton.Draw(spriteBatch);
             backButton.Draw(spriteBatch);
-            if (xmlNames.Length > (Page+1)*10)                   listForwardButton.Draw(spriteBatch);
+            if (songNames.Length > (Page+1)*10)                   listForwardButton.Draw(spriteBatch);
             if (Page > 0)                               listBackwardButton.Draw(spriteBatch);
 
-                    if (xmlNames.Length == 0)
+                    if (songNames.Length == 0)
                     {
-                        spriteBatch.DrawString(font, "No Beatmaps to Load.", new Vector2(100, 200), Color.Black);
-                        spriteBatch.DrawString(font, "Create some with the Beatmap Creator!", new Vector2(100, 230), Color.Black);
+                        spriteBatch.DrawString(font, "No Songs to Load.", new Vector2(100, 200), Color.Black);
                     }
                     else
                     {
@@ -73,7 +72,7 @@ namespace RhythmMaster
 
                         foreach (String file in pageContents)
                         {
-                            String[] splittedName = Regex.Split(file, ".xml");
+                            String[] splittedName = Regex.Split(file, ".mp3");
 
                             loadSelectionButtonList[file].Draw(spriteBatch, new Vector2(xOffset - 10, yOffset - 10));
                             spriteBatch.DrawString(font, splittedName[0], new Vector2(xOffset, yOffset), Color.Black);
@@ -98,13 +97,13 @@ namespace RhythmMaster
             
             if (tap.Intersects(backButton.Bounds))
             {
-                backButton.makeNonClickable();
-                //TODO back button
+                return GameState.XMLLoadMenu;
             }
                 
             if (tap.Intersects(nextButton.Bounds))
             {
-                //TODO next button
+                PointGenerator.settestsong(selectedSong);
+                return GameState.Playing;
             }
                     
             if (tap.Intersects(listBackwardButton.Bounds))
@@ -123,7 +122,7 @@ namespace RhythmMaster
                     if (selectedNavButton != null) selectedNavButton.Color = Color.Aqua;
                     kvp.Value.Color = Color.DarkBlue;
                     selectedNavButton = kvp.Value;
-                    selectedBeatmap = kvp.Key;
+                    selectedSong = kvp.Key;
                     break;
                 }
             }
@@ -133,11 +132,11 @@ namespace RhythmMaster
         {
             Page += modifier;
             int loadtemp = 10;
-            if (xmlNames.Length < (Page + 1) * 10) loadtemp = 10 - ((Page + 1) * 10 - xmlNames.Length);
+            if (songNames.Length < (Page + 1) * 10) loadtemp = 10 - ((Page + 1) * 10 - songNames.Length);
             pageContents = new String[loadtemp];
             for (int i = 0; i < loadtemp; i++)
             {
-               pageContents[i] = xmlNames[i+Page*10];
+               pageContents[i] = songNames[i+Page*10];
             }
         }
     }
