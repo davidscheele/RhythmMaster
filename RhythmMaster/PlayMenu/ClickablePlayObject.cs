@@ -3,26 +3,22 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
-public class BeatRing
+public abstract class ClickablePlayObject
 {
-    private Clickable hostBeat;
-    public Clickable Beat
+    private Boolean draw = true;
+    private Vector2 position = new Vector2(0, 0);
+    public Boolean thisDraw
     {
-        get
-        {
-            return hostBeat;
-        }
         set
         {
-            hostBeat = value;
+            draw = value;
         }
     }
-    private Vector2 position = new Vector2(0, 0);
     public Vector2 Center
     {
         get
         {
-            Vector2 _position = originalPosition;
+            Vector2 _position = position;
             _position.X = _position.X + (this.Width / 2);
             _position.Y = _position.Y + (this.Height / 2);
             return _position;
@@ -44,16 +40,16 @@ public class BeatRing
             position = value;
         }
     }
-    private Vector2 originalPosition = new Vector2(0,0);
-    private Vector2 OriginalTopLeft
+    private BeatRing beatRing;
+    public BeatRing BeatRing
     {
         get
         {
-            return originalPosition;
+            return beatRing;
         }
         set
         {
-            originalPosition = value;
+            beatRing = value;
         }
     }
     private Rectangle bounds;
@@ -76,7 +72,7 @@ public class BeatRing
             return scale;
         }
     }
-    private Boolean scaleswitcher = true;
+
     public Texture2D Texture
     {
         get
@@ -103,71 +99,45 @@ public class BeatRing
             return this.texture.Width;
         }
     }
-    private String assetName = "beatring_s";
+    private String assetName;
     public String AssetName
     {
         get { return this.assetName; }
         set { this.assetName = value; }
     }
 
-	public BeatRing(Vector2 posi)
+	public ClickablePlayObject()
 	{
-        this.TopLeft = new Vector2(posi.X - 100,posi.Y - 100);
-        this.OriginalTopLeft = posi;
+        
 
 	}
-
+    public void thisIsTouched()
+    {
+        
+    }
     public void LoadContent(ContentManager _contentManager)
     {
         this.texture = _contentManager.Load<Texture2D>(assetName);
+        this.BeatRing.LoadContent(_contentManager);
+    }
+    public void Draw(SpriteBatch _spriteBatch)
+    {
+        if (this.draw)
+        {
+            _spriteBatch.Draw(texture, position, null, Color.Yellow, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
+            if (!this.BeatRing.Draw(_spriteBatch))
+            {
+                this.draw = false;
+            }
+        }
+            
+
+        this.Bounds = new Rectangle((int)this.TopLeft.X, (int)this.TopLeft.Y, (int)this.Width, (int)this.Height);
+
+
 
     }
-    public Boolean Draw(SpriteBatch _spriteBatch)
-    {
-        scaleDown();
-        giveNewTopLeft();
-        if (checkScale())
-        {
-            _spriteBatch.Draw(texture, position, null, Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
-        }
-            //this.scaleUpAndDown();
-            return checkScale();
-    }
 
-    private Boolean checkPosition()
-    {
-        if (this.Beat.TopLeft.X <= this.TopLeft.X)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-
-    }
-    private void giveNewTopLeft()
-    {
-        Vector2 _topLeft = new Vector2(0,0);
-        _topLeft.X = (100 - (100 * scale)) + this.OriginalTopLeft.X;
-        _topLeft.Y = (100 - (100 * scale)) + this.OriginalTopLeft.Y;
-        this.TopLeft = _topLeft;
-    }
-    public Boolean checkScale() //Bigger than 0.5f scale
-    {
-        if (scale <= 0.35f)
-        {
-            return false;
-        }
-        else
-        {
-            return true;
-        }
-    }
-    private void scaleDown()
-    {
-        scale = scale - 0.02f;
-    }
 
 
 

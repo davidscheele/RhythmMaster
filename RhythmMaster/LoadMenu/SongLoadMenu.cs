@@ -5,17 +5,19 @@ using System.Text;
 using System.IO;
 using System.IO.IsolatedStorage;
 using System.Text.RegularExpressions;
+using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using RhythmMaster.Functions;
 
 namespace RhythmMaster
 {
     public class SongLoadMenu : LoadMenu
     {
-       
 
-        String[] songNames;
+
+        MediaLibrary medialib = new MediaLibrary();
         String[] pageContents;
         SpriteFont font;
         NavigationButton mainMenuButton = new MainMenuButton(new Vector2(30, 400));
@@ -28,7 +30,6 @@ namespace RhythmMaster
         String selectedSong = "000000";
         NavigationButton selectedNavButton;
         int Page = 0;
-        Boolean test = true;
 
         public SongLoadMenu(ContentManager contentManager)
         {
@@ -39,16 +40,13 @@ namespace RhythmMaster
             backButton.Load(contentManager);
             listForwardButton.Load(contentManager);
             listBackwardButton.Load(contentManager);
-            
-            using (var storage = IsolatedStorageFile.GetUserStoreForApplication())
+
+            loadSelectionButtonList = new Dictionary<string, NavigationButton>();
+            foreach (Song song in medialib.Songs)
             {
-                songNames = storage.GetFileNames("*.mp3");
+                loadSelectionButtonList.Add(song.Name, new LoadSelectionButton(loadSelectionButtonTexture));
             }
-            loadSelectionButtonList = new Dictionary<string,NavigationButton>();
-            foreach (String name in songNames)
-            {
-                loadSelectionButtonList.Add(name, new LoadSelectionButton(loadSelectionButtonTexture));
-            }
+
             turnPage(0);
         }
         public void Draw(SpriteBatch spriteBatch)
@@ -58,10 +56,10 @@ namespace RhythmMaster
             mainMenuButton.Draw(spriteBatch);
             if (selectedNavButton != null) nextButton.Draw(spriteBatch);
             backButton.Draw(spriteBatch);
-            if (songNames.Length > (Page+1)*10)                   listForwardButton.Draw(spriteBatch);
+            if (medialib.Songs.Count > (Page+1)*10)                   listForwardButton.Draw(spriteBatch);
             if (Page > 0)                               listBackwardButton.Draw(spriteBatch);
 
-                    if (songNames.Length == 0)
+                    if (medialib.Songs.Count == 0)
                     {
                         spriteBatch.DrawString(font, "No Songs to Load.", new Vector2(100, 200), Color.Black);
                     }
@@ -132,11 +130,11 @@ namespace RhythmMaster
         {
             Page += modifier;
             int loadtemp = 10;
-            if (songNames.Length < (Page + 1) * 10) loadtemp = 10 - ((Page + 1) * 10 - songNames.Length);
+            if (medialib.Songs.Count < (Page + 1) * 10) loadtemp = 10 - ((Page + 1) * 10 - medialib.Songs.Count);
             pageContents = new String[loadtemp];
             for (int i = 0; i < loadtemp; i++)
             {
-               pageContents[i] = songNames[i+Page*10];
+               pageContents[i] = medialib.Songs[i+Page*10].Name;
             }
         }
     }

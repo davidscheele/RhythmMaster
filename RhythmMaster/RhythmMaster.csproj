@@ -57,6 +57,9 @@
     <Reference Include="Microsoft.Xna.Framework.GamerServices" />
     <Reference Include="Microsoft.Xna.Framework.Input.Touch" />
     <Reference Include="mscorlib" />
+    <Reference Include="ShakeGestures">
+      <HintPath>..\..\..\..\Downloads\ShakeGestures\ShakeGestures.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
@@ -64,9 +67,10 @@
     <Reference Include="System.Net" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BeatmapCreator.cs" />
-    <Compile Include="BeatTimerData.cs" />
-    <Compile Include="GameState.cs" />
+    <Compile Include="Functions\BeatTimerData.cs" />
+    <Compile Include="Functions\GameState.cs" />
+    <Compile Include="Functions\PointEffectState.cs" />
+    <Compile Include="Functions\ShakerColorList.cs" />
     <Compile Include="LoadMenu\SongLoadMenu.cs" />
     <Compile Include="LoadMenu\XMLLoadMenu.cs" />
     <Compile Include="LoadMenu\LoadSelectionButton.cs" />
@@ -76,16 +80,17 @@
     <Compile Include="LoadMenu\NextButton.cs" />
     <Compile Include="LoadMenu\LoadMenu.cs" />
     <Compile Include="LoadMenu\MainMenuButton.cs" />
-    <Compile Include="ReturnToMainMenuButton.cs" />
-    <Compile Include="CreateBeatmapsButton.cs" />
-    <Compile Include="NavigationButton.cs" />
-    <Compile Include="PlayBeatmapsButton.cs" />
-    <Compile Include="XmlConverter.cs" />
-    <Compile Include="PointGenerator.cs" />
-    <Compile Include="Clickable.cs" />
-    <Compile Include="Beat.cs" />
-    <Compile Include="BeatRing.cs" />
-    <Compile Include="PointEffect.cs" />
+    <Compile Include="MainMenu\ReturnToMainMenuButton.cs" />
+    <Compile Include="MainMenu\CreateBeatmapsButton.cs" />
+    <Compile Include="Functions\NavigationButton.cs" />
+    <Compile Include="MainMenu\PlayBeatmapsButton.cs" />
+    <Compile Include="Functions\XmlConverter.cs" />
+    <Compile Include="PlayMenu\Shaker.cs" />
+    <Compile Include="PlayMenu\PointGenerator.cs" />
+    <Compile Include="PlayMenu\ClickablePlayObject.cs" />
+    <Compile Include="PlayMenu\Beat.cs" />
+    <Compile Include="PlayMenu\BeatRing.cs" />
+    <Compile Include="PlayMenu\PointEffect.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <None Include="ClassDiagram1.cd" />
     <None Include="Properties\AppManifest.xml">

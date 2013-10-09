@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace RhythmMaster
+namespace RhythmMaster.Functions
 {
     public enum GameState
     {
@@ -13,5 +13,6 @@ namespace RhythmMaster
         XMLLoadMenu,
         SongLoadMenu,
         SaveMenu,
+        TestMenu, //edit out
     }
 }

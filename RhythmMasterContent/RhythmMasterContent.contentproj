@@ -65,36 +65,36 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="100points.png">
+    <Compile Include="PointEffects\100points.png">
       <Name>100points</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="300points.png">
+    <Compile Include="PointEffects\300points.png">
       <Name>300points</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="nopoints.png">
+    <Compile Include="PointEffects\nopoints.png">
       <Name>nopoints</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="drum.wav">
+    <Compile Include="PointEffects\drum.wav">
       <Name>drum</Name>
       <Importer>WavImporter</Importer>
       <Processor>SoundEffectProcessor</Processor>
     </Compile>
-    <Compile Include="tambourine.wav">
+    <Compile Include="PointEffects\tambourine.wav">
       <Name>tambourine</Name>
       <Importer>WavImporter</Importer>
       <Processor>SoundEffectProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="hi-hat.wav">
+    <Compile Include="PointEffects\hi-hat.wav">
       <Name>hi-hat</Name>
       <Importer>WavImporter</Importer>
       <Processor>SoundEffectProcessor</Processor>
@@ -177,6 +177,13 @@
   <ItemGroup>
     <Compile Include="LoadMenu\loadselectionbutton.png">
       <Name>loadselectionbutton</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="shakeindicator.png">
+      <Name>shakeindicator</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

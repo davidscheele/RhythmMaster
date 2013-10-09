@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using RhythmMaster.Functions;
 
 namespace RhythmMaster
 {

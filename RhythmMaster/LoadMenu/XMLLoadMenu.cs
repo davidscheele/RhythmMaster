@@ -5,6 +5,7 @@ using System.Text;
 using System.IO;
 using System.IO.IsolatedStorage;
 using System.Text.RegularExpressions;
+using RhythmMaster.Functions;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -27,7 +28,6 @@ namespace RhythmMaster
         String selectedBeatmap = "000000";
         NavigationButton selectedNavButton;
         int Page = 0;
-        Boolean test = true;
 
         public XMLLoadMenu(ContentManager contentManager)
         {

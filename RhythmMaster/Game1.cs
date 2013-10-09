@@ -9,6 +9,13 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
 using Microsoft.Xna.Framework.Media;
 
+
+using ShakeGestures;
+
+using RhythmMaster.Functions;
+using RhythmMaster.PlayMenu;
+
+
 //Testlibs
 using System.IO;
 using System.IO.IsolatedStorage;
@@ -34,27 +41,28 @@ namespace RhythmMaster
         SpriteFont debugFont;
         LoadMenu loadMenu;
 
+        Shaker testShaker = new Shaker();
+
         Song munchymonk;
 
         Boolean beatAppeared = false;
-        Boolean notYetTouched = true;
 
-        int startTime = 1;
         int gameTimeSinceStart = 0;
         int gameTimeSincePlaying = 0;
         int gameTimeSinceCreating = 0;
 
         int timeBeatAppeared = 0;
 
-        String debug04String = "";
-
-        Dictionary<int, Clickable> BeatDictionary = new Dictionary<int,Clickable>();
+        Dictionary<int, ClickablePlayObject> BeatDictionary = new Dictionary<int,ClickablePlayObject>();
 
        List<BeatTimerData> BeatTimerList = new List<BeatTimerData>();
         
 
         public Game1()
         {
+            ShakeGesturesHelper.Instance.ShakeGesture += new EventHandler<ShakeGestureEventArgs>(Instance_ShakeGesture);
+            ShakeGesturesHelper.Instance.MinimumRequiredMovesForShake = 1;
+            ShakeGesturesHelper.Instance.Active = true;
 
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
@@ -74,6 +82,15 @@ namespace RhythmMaster
             InactiveSleepTime = TimeSpan.FromSeconds(1);
         }
 
+        private void Instance_ShakeGesture(object sender, ShakeGestureEventArgs e)
+        {
+            if (CurrentGameState == GameState.TestMenu)
+            {
+                testShaker.completeSomeMore();
+            }
+        }
+
+
         public void Save(string filename)
         {
 
@@ -86,14 +103,14 @@ namespace RhythmMaster
 
         private void LoadLateContent()
         {
-            BeatDictionary = new Dictionary<int, Clickable>();
+            BeatDictionary = new Dictionary<int, ClickablePlayObject>();
             foreach (BeatTimerData btd in BeatTimerList)
             {
                 BeatDictionary.Add(btd.Timestamp, new Beat(btd.StartPosition));
 
             }
 
-            foreach (KeyValuePair<int, Clickable> kvp in BeatDictionary)
+            foreach (KeyValuePair<int, ClickablePlayObject> kvp in BeatDictionary)
             {
                 kvp.Value.LoadContent(this.Content);
             }
@@ -108,6 +125,7 @@ namespace RhythmMaster
             playBeatmapsButton.Load(this.Content);
             createBeatmapsButton.Load(this.Content);
             returnToMainMenuButton.Load(this.Content);
+            testShaker.LoadContent(this.Content);
 
             munchymonk = Content.Load<Song>("munchymonk");
 
@@ -117,7 +135,7 @@ namespace RhythmMaster
 
             }
 
-            foreach (KeyValuePair<int, Clickable> kvp in BeatDictionary)
+            foreach (KeyValuePair<int, ClickablePlayObject> kvp in BeatDictionary)
             {
                 kvp.Value.LoadContent(this.Content);
             }
@@ -146,9 +164,10 @@ namespace RhythmMaster
                             case (GestureType.Tap):
                                 if(createBeatmapsButton.checkClick(gesture))
                                 {
-                                    this.CurrentGameState = GameState.BeatmapCreator;
-                                    BeatTimerList = new List<BeatTimerData>();
-                                    MediaPlayer.Play(munchymonk);
+                                    //this.CurrentGameState = GameState.BeatmapCreator; // actual
+                                    this.CurrentGameState = GameState.TestMenu; //testing purposes
+                                    //BeatTimerList = new List<BeatTimerData>(); //Actual
+                                    //MediaPlayer.Play(munchymonk); //actual
                                 };
                                 if(playBeatmapsButton.checkClick(gesture))
                                 {
@@ -269,7 +288,7 @@ namespace RhythmMaster
 
         private void checkIntersect(Vector2 tapPosition)
         {
-            Clickable testBeat;
+            ClickablePlayObject testBeat;
             foreach (int key in BeatDictionary.Keys)
             {
                 if (key <= gameTimeSincePlaying)
@@ -316,7 +335,7 @@ namespace RhythmMaster
 
                     PointGenerator.Draw(spriteBatch, gameTimeSincePlaying);
 
-                    Clickable tempClickable;
+                    ClickablePlayObject tempClickable;
 
                     foreach (int key in BeatDictionary.Keys)
                     {
@@ -349,6 +368,9 @@ namespace RhythmMaster
 
                 case GameState.SongLoadMenu:
                     loadMenu.Draw(spriteBatch);
+                    break;
+                case GameState.TestMenu:
+                    testShaker.Draw(spriteBatch);
                     break;
             }
 

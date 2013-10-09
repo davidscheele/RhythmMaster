@@ -32,13 +32,13 @@ using Microsoft.Xna.Framework.Audio;
 
         public static void Load(ContentManager _contentManager)
         {
-            fullpointsSoundeffect = _contentManager.Load<SoundEffect>("tambourine");
-            halfpointsSoundeffect = _contentManager.Load<SoundEffect>("hi-hat");
-            nopointsSoundeffect = _contentManager.Load<SoundEffect>("drum");
+            fullpointsSoundeffect = _contentManager.Load<SoundEffect>("PointEffects/tambourine");
+            halfpointsSoundeffect = _contentManager.Load<SoundEffect>("PointEffects/hi-hat");
+            nopointsSoundeffect = _contentManager.Load<SoundEffect>("PointEffects/drum");
 
-            fullpointsTexture = _contentManager.Load<Texture2D>("300points");
-            halfpointsTexture = _contentManager.Load<Texture2D>("100points");
-            nopointsTexture = _contentManager.Load<Texture2D>("nopoints");
+            fullpointsTexture = _contentManager.Load<Texture2D>("PointEffects/300points");
+            halfpointsTexture = _contentManager.Load<Texture2D>("PointEffects/100points");
+            nopointsTexture = _contentManager.Load<Texture2D>("PointEffects/nopoints");
         }
 
         public static void Draw(SpriteBatch _spriteBatch, int _timeSinceStart)
