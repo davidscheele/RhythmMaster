@@ -31,8 +31,9 @@ using Microsoft.Xna.Framework;
                 child.Add(new XElement("ystart", btd.StartPosition.Y));
                 child.Add(new XElement("xend", btd.EndPosition.X));
                 child.Add(new XElement("yend", btd.EndPosition.Y));
+                child.Add(new XElement("shakerlength", btd.ShakerLength));
                 child.Add(new XElement("isslider", btd.IsSlider));
-                child.Add(new XElement("isspinner", btd.IsSpinner));
+                child.Add(new XElement("isshaker", btd.IsShaker));
 
                 xDoc.Root.Add(child);
             }
@@ -53,18 +54,19 @@ using Microsoft.Xna.Framework;
                 using (Stream stream = storage.OpenFile(filename + ".xml", FileMode.Open))
                 {
                     XDocument yDoc = XDocument.Load(stream);
-                    IEnumerable<XElement> beats = yDoc.Descendants("beat");
+                    IEnumerable<XElement> beatdata = yDoc.Descendants("beat");
                     
 
-                    foreach (var beat in beats)
+                    foreach (var beatpart in beatdata)
                     {
                        tempBeatTimerDataList.Add(
                            new BeatTimerData(
-                               int.Parse(beat.Element("timestamp").Value), 
-                               new Microsoft.Xna.Framework.Vector2(float.Parse(beat.Element("xstart").Value), float.Parse(beat.Element("ystart").Value)), 
-                               new Microsoft.Xna.Framework.Vector2(float.Parse(beat.Element("xend").Value), float.Parse(beat.Element("yend").Value)), 
-                               Boolean.Parse(beat.Element("isslider").Value),
-                               Boolean.Parse(beat.Element("isslider").Value)
+                               int.Parse(beatpart.Element("timestamp").Value), 
+                               new Microsoft.Xna.Framework.Vector2(float.Parse(beatpart.Element("xstart").Value), float.Parse(beatpart.Element("ystart").Value)), 
+                               new Microsoft.Xna.Framework.Vector2(float.Parse(beatpart.Element("xend").Value), float.Parse(beatpart.Element("yend").Value)), 
+                               int.Parse(beatpart.Element("shakerlength").Value),
+                               Boolean.Parse(beatpart.Element("isslider").Value),
+                               Boolean.Parse(beatpart.Element("isslider").Value)
                            )
                        );
                     }

@@ -6,13 +6,14 @@ using Microsoft.Xna.Framework.Graphics;
 
     public class BeatTimerData
     {
-        public BeatTimerData(int _timestamp, Vector2 _startPosition, Vector2 _endPosition, Boolean _isSlider, Boolean _isSpinner)
+        public BeatTimerData(int _timestamp, Vector2 _startPosition, Vector2 _endPosition, int _shakerLength, Boolean _isSlider, Boolean _isShaker)
         {
             this.Timestamp = _timestamp;
             this.StartPosition = _startPosition;
             this.EndPosition = _endPosition;
+            this.ShakerLength = _shakerLength;
             this.IsSlider = _isSlider;
-            this.IsSpinner = _isSpinner;
+            this.IsShaker = _isShaker;
         }
 
         private int timestamp;
@@ -51,29 +52,24 @@ using Microsoft.Xna.Framework.Graphics;
                 endPosition = value;
             }
         }
+        private int shakerLength;
+        public int ShakerLength
+        {
+            get { return shakerLength; }
+            set { shakerLength = value; }
+        }
         private Boolean isSlider;
         public Boolean IsSlider
         {
-            get
-            {
-                return isSlider;
-            }
-            set
-            {
-                isSlider = value;
-            }
+            get{return isSlider;}
+            set { isSlider = value; }
+            
         }
-        private Boolean isSpinner;
-        public Boolean IsSpinner
+        private Boolean isShaker;
+        public Boolean IsShaker
         {
-            get
-            {
-                return isSpinner;
-            }
-            set
-            {
-                isSpinner = value;
-            }
+            get { return isShaker; }
+            set { isShaker = value; }
         }
         }
 

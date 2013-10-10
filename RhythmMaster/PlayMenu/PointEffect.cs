@@ -46,6 +46,7 @@ public class PointEffect
         this.Texture = _texture;
         this.Center = _centerPoint;
         _soundEffect.Play();
+        
     }
 
     public Boolean Draw(SpriteBatch _spriteBatch, int _actualGameTime)
