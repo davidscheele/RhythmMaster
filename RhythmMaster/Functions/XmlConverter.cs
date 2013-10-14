@@ -51,7 +51,7 @@ using Microsoft.Xna.Framework;
             List<BeatTimerData> tempBeatTimerDataList = new List<BeatTimerData>();
             using (var storage = IsolatedStorageFile.GetUserStoreForApplication())
             {
-                using (Stream stream = storage.OpenFile(filename + ".xml", FileMode.Open))
+                using (Stream stream = storage.OpenFile(filename, FileMode.Open))
                 {
                     XDocument yDoc = XDocument.Load(stream);
                     IEnumerable<XElement> beatdata = yDoc.Descendants("beat");
@@ -66,7 +66,7 @@ using Microsoft.Xna.Framework;
                                new Microsoft.Xna.Framework.Vector2(float.Parse(beatpart.Element("xend").Value), float.Parse(beatpart.Element("yend").Value)), 
                                int.Parse(beatpart.Element("shakerlength").Value),
                                Boolean.Parse(beatpart.Element("isslider").Value),
-                               Boolean.Parse(beatpart.Element("isslider").Value)
+                               Boolean.Parse(beatpart.Element("isshaker").Value)
                            )
                        );
                     }

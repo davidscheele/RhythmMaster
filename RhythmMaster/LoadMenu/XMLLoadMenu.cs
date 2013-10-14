@@ -98,7 +98,8 @@ namespace RhythmMaster
             if (tap.Intersects(nextButton.Bounds))
             {
                 PointGenerator.settestxml(selectedBeatmap);
-                return GameState.SongLoadMenu;
+                //return GameState.SongLoadMenu; //actual
+                return GameState.Playing; //debug
             }
                     
             if (tap.Intersects(listBackwardButton.Bounds))
