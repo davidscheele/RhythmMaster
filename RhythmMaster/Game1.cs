@@ -50,16 +50,12 @@ namespace RhythmMaster
 
         Song munchymonk;
 
-        Boolean isReleased = true;
-
-        Boolean beatAppeared = false;
+        Boolean isHeld = false;
 
         int gameTimeSinceStart = 0;
         int gameTimeSincePlaying = 0;
         int gameTimeSinceCreating = 0;
         int gameTimeSinceHolding = 0;
-
-        int timeBeatAppeared = 0;
 
         Dictionary<int, ClickablePlayObject> BeatDictionary = new Dictionary<int,ClickablePlayObject>();
 
@@ -248,7 +244,7 @@ namespace RhythmMaster
                                 {
 
                                     case GameState.Playing:
-                                        this.BeatTimerList = xmlConverter.loadBeatmapXML(PointGenerator.gettestxml());
+                                        this.BeatTimerList = xmlConverter.loadBeatmapXML(PointGenerator.gettestxml()); //getXML auslagern!!
                                         this.LoadLateContent();
                                         MediaPlayer.Play(munchymonk);
                                         CurrentGameState = GameState.Playing;
@@ -287,11 +283,13 @@ namespace RhythmMaster
                     TouchCollection touchcol = TouchPanel.GetState();
                     foreach (TouchLocation touchlocation in touchcol)
                     {
-                        if (touchlocation.State == TouchLocationState.Released)
+                        if (touchlocation.State == TouchLocationState.Released && isHeld)
                         {
-                            int time = gameTimeSincePlaying - gameTimeSinceHolding;
-                            debugstring1 = "Held for: " + time;
-                        }
+                            int heldTime = MediaPlayer.PlayPosition.Milliseconds - gameTimeSinceHolding;
+                            //debugstring1 = "Held for: " + heldTime;
+                            BeatTimerList.Add(new BeatTimerData(gameTimeSinceHolding, new Vector2(0, 0), new Vector2(0, 0), heldTime, false, true)); //Adds a Shaker reference with the start time as the screen was touched and the total shaker time as the touch was held.
+                            isHeld = false;
+                            }
                     }   
 
                     while (TouchPanel.IsGestureAvailable)
@@ -300,12 +298,11 @@ namespace RhythmMaster
                         
                         switch (gesture.GestureType)
                         {
+                                
                             case (GestureType.Tap):
                                 if (returnToMainMenuButton.checkClick(gesture))
                                 {
                                     MediaPlayer.Stop();
-                                    
-                                    //this.BeatTimerList = xmlConverter.loadBeatmapXML("test2");
                                     this.CurrentGameState = GameState.SaveMenu;
                                     Guide.BeginShowKeyboardInput(
                                         PlayerIndex.One,
@@ -317,12 +314,15 @@ namespace RhythmMaster
                                 }
                                 else
                                 {
+                                    //debugstring2 = "Created Beat at: " + (MediaPlayer.PlayPosition.Milliseconds - 1500);
+                                    //debugstring2 = "Created Beat at: " + (gameTimeSinceCreating - 1500);
                                     //BeatTimerList.Add(new BeatTimerData(gameTimeSinceCreating - 1500, gesture.Position, new Vector2(0, 0), false, false));
                                     BeatTimerList.Add(new BeatTimerData(MediaPlayer.PlayPosition.Milliseconds - 1500, gesture.Position, new Vector2(0, 0), 0, false, false));
                                 };
                                 break;
                             case (GestureType.Hold):
-                                gameTimeSinceHolding = gameTimeSincePlaying - 1000;
+                                gameTimeSinceHolding = MediaPlayer.PlayPosition.Milliseconds - 1000;
+                                isHeld = true;
                                 break;
                         }
                     }
@@ -374,7 +374,6 @@ namespace RhythmMaster
                     break;
 
                 case GameState.Playing:
-                    //if (beatAppeared && notYetTouched) { timeSinceBeatAppeared = (int)gameTime.TotalGameTime.TotalMilliseconds - timeBeatAppeared; }
                     gameTimeSincePlaying = (int)gameTime.TotalGameTime.TotalMilliseconds - gameTimeSinceStart;
 
                     PointGenerator.Draw(spriteBatch, gameTimeSincePlaying);
@@ -387,7 +386,6 @@ namespace RhythmMaster
                         {
                             BeatDictionary.TryGetValue(key, out tempClickable);
                             tempClickable.Draw(spriteBatch);
-                            if (!beatAppeared) { beatAppeared = true; timeBeatAppeared = gameTimeSincePlaying + gameTimeSinceStart;}
                         }
                         else
                         {
@@ -401,6 +399,8 @@ namespace RhythmMaster
                     gameTimeSinceCreating = (int)gameTime.TotalGameTime.TotalMilliseconds - gameTimeSinceStart;
                     returnToMainMenuButton.Draw(spriteBatch);
                     spriteBatch.DrawString(debugFont, debugstring1, new Vector2(10, 10), Color.Black);
+                    spriteBatch.DrawString(debugFont, debugstring2, new Vector2(10, 30), Color.Black);
+                    spriteBatch.DrawString(debugFont, gameTimeSinceCreating.ToString(), new Vector2(10, 50), Color.Black);
                     break;
 
                 case GameState.SaveMenu:

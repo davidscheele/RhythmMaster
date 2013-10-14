@@ -9,7 +9,7 @@ using RhythmMaster.Functions;
 
 namespace RhythmMaster.PlayMenu
 {
-    public class Shaker
+    public class Shaker : PlayObject
     {
         int shakesToComplete;
         int shakesDone;
