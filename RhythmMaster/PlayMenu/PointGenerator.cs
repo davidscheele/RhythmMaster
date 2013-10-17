@@ -30,6 +30,18 @@ using Microsoft.Xna.Framework.Audio;
         static List<PointEffect> pointEffectList = new List<PointEffect>();
         static Dictionary<int, PointEffect> pointEffectsDictionary = new Dictionary<int, PointEffect>();
 
+        static int totalPoints = 0;
+        public static int TotalPoints
+        {
+            get { return totalPoints; }
+        }
+
+        static int multiplicator = 1;
+        public static String Multiplicator
+        {
+            get { return "x" + multiplicator; }
+        }
+
         public static void Load(ContentManager _contentManager)
         {
             fullpointsSoundeffect = _contentManager.Load<SoundEffect>("PointEffects/tambourine");
@@ -40,7 +52,7 @@ using Microsoft.Xna.Framework.Audio;
             halfpointsTexture = _contentManager.Load<Texture2D>("PointEffects/100points");
             nopointsTexture = _contentManager.Load<Texture2D>("PointEffects/nopoints");
         }
-
+        
         public static void Draw(SpriteBatch _spriteBatch, int _timeSinceStart)
         {
             PointEffect tempPointEffect;
@@ -69,19 +81,30 @@ using Microsoft.Xna.Framework.Audio;
 
         }
 
+        public static void ResetPoints()
+        {
+            multiplicator = 1;
+            totalPoints = 0;
+        }
+
         public static void generatePointEffect(Vector2 _center, float _scale, int _gameTimeSinceStart)
         {
             if (_scale >= 0.7f)
             {
                 pointEffectsDictionary.Add(_gameTimeSinceStart, new PointEffect(nopointsTexture, nopointsSoundeffect, _center, _gameTimeSinceStart));
+                multiplicator = 1;
             }
             else if ((_scale < 0.7 && _scale >= 0.6f) || _scale <= 0.4)
             {
                 pointEffectsDictionary.Add(_gameTimeSinceStart, new PointEffect(halfpointsTexture, halfpointsSoundeffect, _center, _gameTimeSinceStart));
+                totalPoints += 100*multiplicator;
+                multiplicator++;
             }
             else
             {
                 pointEffectsDictionary.Add(_gameTimeSinceStart, new PointEffect(fullpointsTexture, fullpointsSoundeffect, _center, _gameTimeSinceStart));
+                totalPoints += 300*multiplicator;
+                multiplicator++;
             }
 
 

@@ -56,6 +56,7 @@ namespace RhythmMaster
         int gameTimeSincePlaying = 0;
         int gameTimeSinceCreating = 0;
         int gameTimeSinceHolding = 0;
+        int mediaplayerTime = 0;
 
         Dictionary<int, PlayObject> BeatDictionary = new Dictionary<int,PlayObject>();
 
@@ -106,7 +107,7 @@ namespace RhythmMaster
             PlayObject testBeat;
             foreach (int key in BeatDictionary.Keys)
             {
-                if (key <= gameTimeSincePlaying)
+                if (key <= MediaPlayer.PlayPosition.TotalMilliseconds)
                 {
                     BeatDictionary.TryGetValue(key, out testBeat);
 
@@ -116,7 +117,7 @@ namespace RhythmMaster
                     {
                         if (tempObject.Bounds.Intersects(new Rectangle((int)tapPosition.X, (int)tapPosition.Y, 1, 1)))
                         {
-                            PointGenerator.generatePointEffect(tempObject.Center, tempObject.BeatRing.Scale, gameTimeSincePlaying);
+                            PointGenerator.generatePointEffect(tempObject.Center, tempObject.BeatRing.Scale, (int) MediaPlayer.PlayPosition.TotalMilliseconds);
                             tempObject.thisDraw = false;
                         }
                     }
@@ -327,7 +328,7 @@ namespace RhythmMaster
                                     //debugstring2 = "Created Beat at: " + (MediaPlayer.PlayPosition.Milliseconds - 1500);
                                     //debugstring2 = "Created Beat at: " + (gameTimeSinceCreating - 1500);
                                     //BeatTimerList.Add(new BeatTimerData(gameTimeSinceCreating - 1500, gesture.Position, new Vector2(0, 0), false, false));
-                                    BeatTimerList.Add(new BeatTimerData((int) MediaPlayer.PlayPosition.TotalMilliseconds - 1500, gesture.Position, new Vector2(0, 0), 0, false, false));
+                                    BeatTimerList.Add(new BeatTimerData((int) MediaPlayer.PlayPosition.TotalMilliseconds - 1900, gesture.Position, new Vector2(0, 0), 0, false, false));
                                 };
                                 break;
                             case (GestureType.Hold):
@@ -384,15 +385,18 @@ namespace RhythmMaster
                     break;
 
                 case GameState.Playing:
-                    gameTimeSincePlaying = (int)gameTime.TotalGameTime.TotalMilliseconds - gameTimeSinceStart;
+                    //gameTimeSincePlaying = (int)gameTime.TotalGameTime.TotalMilliseconds - gameTimeSinceStart;
 
-                    PointGenerator.Draw(spriteBatch, gameTimeSincePlaying);
+                    spriteBatch.DrawString(debugFont, PointGenerator.TotalPoints.ToString(), new Vector2(10, 10), Color.Black);
+                    spriteBatch.DrawString(debugFont, PointGenerator.Multiplicator, new Vector2(10, 30), Color.Black);
+
+                    PointGenerator.Draw(spriteBatch, (int) MediaPlayer.PlayPosition.TotalMilliseconds);
 
                     PlayObject tempPlayObject;
 
                     foreach (int key in BeatDictionary.Keys)
                     {
-                        if (key <= gameTimeSincePlaying)
+                        if (key <= MediaPlayer.PlayPosition.TotalMilliseconds)
                         {
                             BeatDictionary.TryGetValue(key, out tempPlayObject);
                             tempPlayObject.Draw(spriteBatch);

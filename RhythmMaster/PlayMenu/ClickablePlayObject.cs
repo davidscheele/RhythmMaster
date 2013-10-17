@@ -2,6 +2,7 @@ using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Media;
 
 namespace RhythmMaster.PlayMenu
 {
@@ -125,6 +126,7 @@ namespace RhythmMaster.PlayMenu
                 _spriteBatch.Draw(texture, position, null, Color.Yellow, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
                 if (!this.BeatRing.Draw(_spriteBatch))
                 {
+                    PointGenerator.generatePointEffect(this.Center, 2f, (int)MediaPlayer.PlayPosition.TotalMilliseconds);
                     this.draw = false;
                 }
             }
