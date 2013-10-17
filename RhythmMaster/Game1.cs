@@ -118,7 +118,8 @@ namespace RhythmMaster
                         if (tempObject.Bounds.Intersects(new Rectangle((int)tapPosition.X, (int)tapPosition.Y, 1, 1)))
                         {
                             PointGenerator.generatePointEffect(tempObject.Center, tempObject.BeatRing.Scale, (int) MediaPlayer.PlayPosition.TotalMilliseconds);
-                            tempObject.thisDraw = false;
+                            tempObject.vanish();
+                            break;
                         }
                     }
                 }
@@ -182,12 +183,10 @@ namespace RhythmMaster
 
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
-                this.Exit();
-
-
             switch (CurrentGameState){
                 case GameState.MainMenu:                                            //Check for Clicks in Main Menu
+                    if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
+                        this.Exit();
                     while (TouchPanel.IsGestureAvailable)
                     {
                         GestureSample gesture = TouchPanel.ReadGesture();
@@ -212,6 +211,11 @@ namespace RhythmMaster
                     }
                     break;
                 case GameState.XMLLoadMenu:
+                    if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
+                    { 
+                        CurrentGameState = GameState.MainMenu;
+                        break;
+                    }
                     while (TouchPanel.IsGestureAvailable)
                     {
                         GestureSample gesture = TouchPanel.ReadGesture();
@@ -244,6 +248,12 @@ namespace RhythmMaster
                     break;
 
                 case GameState.SongLoadMenu:
+                    if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
+                    {
+                        CurrentGameState = GameState.XMLLoadMenu;
+                        loadMenu = new XMLLoadMenu(this.Content);
+                        break;
+                    }
                     while (TouchPanel.IsGestureAvailable)
                     {
                         GestureSample gesture = TouchPanel.ReadGesture();
@@ -276,6 +286,12 @@ namespace RhythmMaster
                     }
                     break;
                 case GameState.Playing:                                             //Check for Beat klicks
+                    if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
+                    {
+                        CurrentGameState = GameState.MainMenu;
+                        MediaPlayer.Stop();
+                        break;
+                    }
                     while (TouchPanel.IsGestureAvailable)
                     {
                         GestureSample gesture = TouchPanel.ReadGesture();
@@ -290,7 +306,12 @@ namespace RhythmMaster
                     break;
 
                 case GameState.BeatmapCreator:                                      //Check for Taps to create Beatmap
-
+                    if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
+                    {
+                        CurrentGameState = GameState.MainMenu;
+                        MediaPlayer.Stop();
+                        break;
+                    }
                     TouchCollection touchcol = TouchPanel.GetState();
                     foreach (TouchLocation touchlocation in touchcol)
                     {
@@ -446,6 +467,7 @@ namespace RhythmMaster
 
         private void saveBeatmapAs(IAsyncResult r)
         {
+            
             xmlConverter.saveBeatmap(BeatTimerList, Guide.EndShowKeyboardInput(r));
             CurrentGameState = GameState.MainMenu;
         }

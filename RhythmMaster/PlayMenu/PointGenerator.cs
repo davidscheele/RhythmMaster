@@ -87,22 +87,22 @@ using Microsoft.Xna.Framework.Audio;
             totalPoints = 0;
         }
 
-        public static void generatePointEffect(Vector2 _center, float _scale, int _gameTimeSinceStart)
+        public static void generatePointEffect(Vector2 _center, float _scale, int _currentPlayTime)
         {
             if (_scale >= 0.7f)
             {
-                pointEffectsDictionary.Add(_gameTimeSinceStart, new PointEffect(nopointsTexture, nopointsSoundeffect, _center, _gameTimeSinceStart));
+                pointEffectsDictionary.Add(_currentPlayTime, new PointEffect(nopointsTexture, nopointsSoundeffect, _center, _currentPlayTime));
                 multiplicator = 1;
             }
             else if ((_scale < 0.7 && _scale >= 0.6f) || _scale <= 0.4)
             {
-                pointEffectsDictionary.Add(_gameTimeSinceStart, new PointEffect(halfpointsTexture, halfpointsSoundeffect, _center, _gameTimeSinceStart));
+                pointEffectsDictionary.Add(_currentPlayTime, new PointEffect(halfpointsTexture, halfpointsSoundeffect, _center, _currentPlayTime));
                 totalPoints += 100*multiplicator;
                 multiplicator++;
             }
             else
             {
-                pointEffectsDictionary.Add(_gameTimeSinceStart, new PointEffect(fullpointsTexture, fullpointsSoundeffect, _center, _gameTimeSinceStart));
+                pointEffectsDictionary.Add(_currentPlayTime, new PointEffect(fullpointsTexture, fullpointsSoundeffect, _center, _currentPlayTime));
                 totalPoints += 300*multiplicator;
                 multiplicator++;
             }

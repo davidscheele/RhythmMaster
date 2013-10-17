@@ -127,7 +127,7 @@ namespace RhythmMaster.PlayMenu
                 if (!this.BeatRing.Draw(_spriteBatch))
                 {
                     PointGenerator.generatePointEffect(this.Center, 2f, (int)MediaPlayer.PlayPosition.TotalMilliseconds);
-                    this.draw = false;
+                    this.vanish();
                 }
             }
 
@@ -137,7 +137,11 @@ namespace RhythmMaster.PlayMenu
 
 
         }
-
+        public void vanish()
+        {
+            this.Center = new Vector2(-500, -500);
+            this.draw = false;
+        }
 
 
 
