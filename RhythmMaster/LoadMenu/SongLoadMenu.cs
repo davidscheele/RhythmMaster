@@ -21,7 +21,6 @@ namespace RhythmMaster
         String[] pageContents;
         SpriteFont font;
         NavigationButton mainMenuButton = new MainMenuButton(new Vector2(30, 400));
-        NavigationButton backButton = new BackButton(new Vector2(160, 400));
         NavigationButton nextButton = new NextButton(new Vector2(290, 400));
         NavigationButton listBackwardButton = new ListBackwardButton(new Vector2(420, 400));
         NavigationButton listForwardButton = new ListForwardButton(new Vector2(550, 400));
@@ -37,7 +36,7 @@ namespace RhythmMaster
             loadSelectionButtonTexture = contentManager.Load<Texture2D>("LoadMenu/loadselectionbutton");
             mainMenuButton.Load(contentManager);
             nextButton.Load(contentManager);
-            backButton.Load(contentManager);
+            
             listForwardButton.Load(contentManager);
             listBackwardButton.Load(contentManager);
 
@@ -55,7 +54,6 @@ namespace RhythmMaster
          
             mainMenuButton.Draw(spriteBatch);
             if (selectedNavButton != null) nextButton.Draw(spriteBatch);
-            backButton.Draw(spriteBatch);
             if (medialib.Songs.Count > (Page+1)*10)                   listForwardButton.Draw(spriteBatch);
             if (Page > 0)                               listBackwardButton.Draw(spriteBatch);
 
@@ -93,22 +91,17 @@ namespace RhythmMaster
             Rectangle tap = new Rectangle((int)tapLocation.X, (int)tapLocation.Y, 1, 1);
             if (tap.Intersects(mainMenuButton.Bounds)) return GameState.MainMenu;
             
-            if (tap.Intersects(backButton.Bounds))
-            {
-                return GameState.XMLLoadMenu;
-            }
                 
             if (tap.Intersects(nextButton.Bounds))
             {
                 PointGenerator.settestsong(selectedSong);
-                return GameState.Playing;
+                return GameState.XMLLoadMenu;
             }
                     
             if (tap.Intersects(listBackwardButton.Bounds))
             {
                 turnPage(-1);
             }
-                        
             if (tap.Intersects(listForwardButton.Bounds))
             {
                 turnPage(1);
@@ -124,7 +117,7 @@ namespace RhythmMaster
                     break;
                 }
             }
-            return GameState.XMLLoadMenu;
+            return GameState.SongLoadMenu;
         }
         private void turnPage(int modifier)
         {

@@ -10,6 +10,7 @@ namespace RhythmMaster.PlayMenu
 {
     interface PlayObject
     {
+        PlayObjectIdentifier Identifier();
         void LoadContent(ContentManager _contentManager);
         void Draw(SpriteBatch _spriteBatch);
     }

@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Audio;
+using RhythmMaster.Functions;
 
     public static class PointGenerator
     {
@@ -108,6 +109,26 @@ using Microsoft.Xna.Framework.Audio;
             }
 
 
+        }
+        public static void generatePointEffect(Vector2 _center, PointEffectState _state, int _currentPlayTime)
+        {
+            switch (_state)
+            {
+                case PointEffectState.FullPoints:
+                    pointEffectsDictionary.Add(_currentPlayTime, new PointEffect(fullpointsTexture, fullpointsSoundeffect, _center, _currentPlayTime));
+                totalPoints += 300*multiplicator;
+                multiplicator++;
+                    break;
+                case PointEffectState.ReducedPoints:
+                    pointEffectsDictionary.Add(_currentPlayTime, new PointEffect(halfpointsTexture, halfpointsSoundeffect, _center, _currentPlayTime));
+                totalPoints += 100*multiplicator;
+                multiplicator++;
+                    break;
+                case PointEffectState.NoPoints:
+                    pointEffectsDictionary.Add(_currentPlayTime, new PointEffect(nopointsTexture, nopointsSoundeffect, _center, _currentPlayTime));
+                multiplicator = 1;
+                    break;
+            }
         }
 
     }

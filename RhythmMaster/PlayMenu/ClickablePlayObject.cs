@@ -8,6 +8,9 @@ namespace RhythmMaster.PlayMenu
 {
     public abstract class ClickablePlayObject : PlayObject
     {
+        
+        
+
         private Boolean draw = true;
         private Vector2 position = new Vector2(0, 0);
         public Boolean thisDraw
@@ -16,6 +19,10 @@ namespace RhythmMaster.PlayMenu
             {
                 draw = value;
             }
+        }
+        public PlayObjectIdentifier Identifier()
+        {
+            return PlayObjectIdentifier.Beat;
         }
         public Vector2 Center
         {

@@ -87,6 +87,7 @@
     <Compile Include="Functions\XmlConverter.cs" />
     <Compile Include="PlayMenu\PlayObject.cs" />
     <Compile Include="PlayMenu\PlayObjectGenerator.cs" />
+    <Compile Include="PlayMenu\PlayObjectIdentifier.cs" />
     <Compile Include="PlayMenu\Shaker.cs" />
     <Compile Include="PlayMenu\PointGenerator.cs" />
     <Compile Include="PlayMenu\ClickablePlayObject.cs" />

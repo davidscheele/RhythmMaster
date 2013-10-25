@@ -21,6 +21,7 @@ namespace RhythmMaster
         SpriteFont font;
         NavigationButton mainMenuButton = new MainMenuButton(new Vector2(30, 400));
         NavigationButton nextButton = new NextButton(new Vector2(290, 400));
+        NavigationButton backButton = new BackButton(new Vector2(160, 400));
         NavigationButton listBackwardButton = new ListBackwardButton(new Vector2(420, 400));
         NavigationButton listForwardButton = new ListForwardButton(new Vector2(550, 400));
         Texture2D loadSelectionButtonTexture;
@@ -35,8 +36,10 @@ namespace RhythmMaster
             loadSelectionButtonTexture = contentManager.Load<Texture2D>("LoadMenu/loadselectionbutton");
             mainMenuButton.Load(contentManager);
             nextButton.Load(contentManager);
+            backButton.Load(contentManager);
             listForwardButton.Load(contentManager);
             listBackwardButton.Load(contentManager);
+
 
             using (var storage = IsolatedStorageFile.GetUserStoreForApplication())
             {
@@ -52,7 +55,8 @@ namespace RhythmMaster
         public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.DrawString(font, "Loadmenu", new Vector2(30, 10), Color.Black);
-         
+
+            backButton.Draw(spriteBatch);
             mainMenuButton.Draw(spriteBatch);
             if (selectedNavButton != null) nextButton.Draw(spriteBatch);
             if (xmlNames.Length > (Page+1)*10)                   listForwardButton.Draw(spriteBatch);
@@ -92,14 +96,16 @@ namespace RhythmMaster
         {
             Rectangle tap = new Rectangle((int)tapLocation.X, (int)tapLocation.Y, 1, 1);
             if (tap.Intersects(mainMenuButton.Bounds))  return GameState.MainMenu;
-        
-            
+
+            if (tap.Intersects(backButton.Bounds))
+            {
+                return GameState.SongLoadMenu;
+            }
                 
             if (tap.Intersects(nextButton.Bounds))
             {
                 PointGenerator.settestxml(selectedBeatmap);
-                //return GameState.SongLoadMenu; //actual
-                return GameState.Playing; //debug
+                return GameState.Playing;
             }
                     
             if (tap.Intersects(listBackwardButton.Bounds))
