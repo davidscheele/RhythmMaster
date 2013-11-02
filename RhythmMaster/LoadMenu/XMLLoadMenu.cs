@@ -104,7 +104,7 @@ namespace RhythmMaster
                 
             if (tap.Intersects(nextButton.Bounds))
             {
-                PointGenerator.settestxml(selectedBeatmap);
+                DataSaver.SelectedXml(selectedBeatmap);
                 return GameState.Playing;
             }
                     

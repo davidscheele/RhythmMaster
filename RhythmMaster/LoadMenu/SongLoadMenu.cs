@@ -18,15 +18,15 @@ namespace RhythmMaster
 
 
         MediaLibrary medialib = new MediaLibrary();
-        String[] pageContents;
+        Song[] pageContents;
         SpriteFont font;
         NavigationButton mainMenuButton = new MainMenuButton(new Vector2(30, 400));
         NavigationButton nextButton = new NextButton(new Vector2(290, 400));
         NavigationButton listBackwardButton = new ListBackwardButton(new Vector2(420, 400));
         NavigationButton listForwardButton = new ListForwardButton(new Vector2(550, 400));
         Texture2D loadSelectionButtonTexture;
-        Dictionary<String, NavigationButton> loadSelectionButtonList;
-        String selectedSong = "000000";
+        Dictionary<Song, NavigationButton> loadSelectionButtonList;
+        Song selectedSong;
         NavigationButton selectedNavButton;
         int Page = 0;
 
@@ -39,11 +39,11 @@ namespace RhythmMaster
             
             listForwardButton.Load(contentManager);
             listBackwardButton.Load(contentManager);
-
-            loadSelectionButtonList = new Dictionary<string, NavigationButton>();
+            
+            loadSelectionButtonList = new Dictionary<Song, NavigationButton>();
             foreach (Song song in medialib.Songs)
             {
-                loadSelectionButtonList.Add(song.Name, new LoadSelectionButton(loadSelectionButtonTexture));
+                loadSelectionButtonList.Add(song, new LoadSelectionButton(loadSelectionButtonTexture));
             }
 
             turnPage(0);
@@ -66,12 +66,12 @@ namespace RhythmMaster
                         int yOffset = 65;
                         int xOffset = 50;
 
-                        foreach (String file in pageContents)
+                        foreach (Song file in pageContents)
                         {
-                            String[] splittedName = Regex.Split(file, ".mp3");
+                            //String[] splittedName = Regex.Split(file, ".mp3");
 
                             loadSelectionButtonList[file].Draw(spriteBatch, new Vector2(xOffset - 10, yOffset - 10));
-                            spriteBatch.DrawString(font, splittedName[0], new Vector2(xOffset, yOffset), Color.Black);
+                            spriteBatch.DrawString(font, file.Name, new Vector2(xOffset, yOffset), Color.Black);
 
 
                             yOffset += 60;
@@ -94,7 +94,7 @@ namespace RhythmMaster
                 
             if (tap.Intersects(nextButton.Bounds))
             {
-                PointGenerator.settestsong(selectedSong);
+                DataSaver.SelectedSong(selectedSong);
                 return GameState.XMLLoadMenu;
             }
                     
@@ -106,7 +106,7 @@ namespace RhythmMaster
             {
                 turnPage(1);
             }
-            foreach (KeyValuePair<String, NavigationButton> kvp in loadSelectionButtonList)
+            foreach (KeyValuePair<Song, NavigationButton> kvp in loadSelectionButtonList)
             {
                 if (tap.Intersects(kvp.Value.Bounds))
                 {
@@ -124,10 +124,10 @@ namespace RhythmMaster
             Page += modifier;
             int loadtemp = 10;
             if (medialib.Songs.Count < (Page + 1) * 10) loadtemp = 10 - ((Page + 1) * 10 - medialib.Songs.Count);
-            pageContents = new String[loadtemp];
+            pageContents = new Song[loadtemp];
             for (int i = 0; i < loadtemp; i++)
             {
-               pageContents[i] = medialib.Songs[i+Page*10].Name;
+               pageContents[i] = medialib.Songs[i+Page*10];
             }
         }
     }

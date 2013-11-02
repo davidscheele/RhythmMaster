@@ -68,6 +68,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Functions\BeatTimerData.cs" />
+    <Compile Include="Functions\DataSaver.cs" />
     <Compile Include="Functions\GameState.cs" />
     <Compile Include="Functions\PointEffectState.cs" />
     <Compile Include="Functions\ShakerColorList.cs" />

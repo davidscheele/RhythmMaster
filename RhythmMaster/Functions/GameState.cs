@@ -13,6 +13,7 @@ namespace RhythmMaster.Functions
         XMLLoadMenu,
         SongLoadMenu,
         SaveMenu,
+        ScoreMenu,
         TestMenu, //edit out
     }
 }

@@ -40,7 +40,9 @@ namespace RhythmMaster
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         SpriteFont debugFont;
+        SpriteFont scoreFont;
         LoadMenu loadMenu;
+        GameState menuIdentifier;
 
         Shaker testShaker = new Shaker(1200);
 
@@ -60,6 +62,7 @@ namespace RhythmMaster
         int gameTimeSinceCreating = 0;
         int gameTimeSinceHolding = 0;
         int mediaplayerTime = 0;
+        long endTime = 999999999999;
 
         Dictionary<int, PlayObject> BeatDictionary = new Dictionary<int,PlayObject>();
 
@@ -142,6 +145,7 @@ namespace RhythmMaster
                     break;
                 }
             }
+            checkForEndOfSong();
         }
 
         protected override void Initialize()
@@ -176,6 +180,7 @@ namespace RhythmMaster
                 
 
             }
+
             debugstring1 = "Shaker Created: " + debugshakercount;
             debugstring2 = "Beats Created: " + debugbeatcount;
 
@@ -184,12 +189,48 @@ namespace RhythmMaster
                 kvp.Value.LoadContent(this.Content);
             }
         }
+        private void countShakersAndBeats()
+        {
+            int shakerCount = 0;
+            int beatCount = 0;
+            int unknownCount = 0;
+            foreach (KeyValuePair<int, PlayObject> kvp in BeatDictionary)
+            {
+                if (kvp.Value.Identifier() == PlayObjectIdentifier.Shaker)
+                {
+                    shakerCount++;
+                }
+                else
+                {
+                    if (kvp.Value.Identifier() == PlayObjectIdentifier.Beat)
+                    {
+                        beatCount++;
+                    }
+                    else
+                    {
+                        unknownCount++;
+                    }
+                }
+            }
+            debugstring1 = "Beats: " + beatCount;
+            debugstring2 = "Shaker: " + shakerCount;
+            debugstring3 = "Unknown: " + unknownCount;
+        }
+
+        private void checkForEndOfSong()
+        {
+            if (BeatDictionary.Count == 0)
+            {
+                endTime = (long)MediaPlayer.PlayPosition.TotalMilliseconds + 5000;
+            }
+        }
 
         protected override void LoadContent()
         {
             
             spriteBatch = new SpriteBatch(GraphicsDevice);
             debugFont = Content.Load<SpriteFont>("Debugfont");
+            scoreFont = Content.Load<SpriteFont>("ScoreFont");
             PointGenerator.Load(this.Content);
             playBeatmapsButton.Load(this.Content);
             createBeatmapsButton.Load(this.Content);
@@ -231,52 +272,19 @@ namespace RhythmMaster
                             case (GestureType.Tap):
                                 if(createBeatmapsButton.checkClick(gesture))
                                 {
-                                    this.CurrentGameState = GameState.BeatmapCreator; // actual
+                                    this.CurrentGameState = GameState.SongLoadMenu; // actual
+                                    this.menuIdentifier = GameState.BeatmapCreator;
                                     //this.CurrentGameState = GameState.TestMenu; //testing purposes
+                                    loadMenu = new SongLoadMenu(this.Content);
                                     BeatTimerList = new List<BeatTimerData>(); //Actual
-                                    MediaPlayer.Play(munchymonk); //actual
+                                    //MediaPlayer.Play(munchymonk); //debug
                                 };
                                 if(playBeatmapsButton.checkClick(gesture))
                                 {
                                     this.CurrentGameState = GameState.SongLoadMenu;
+                                    this.menuIdentifier = GameState.Playing;
                                     loadMenu = new SongLoadMenu(this.Content);
                                 };
-                                break;
-                        }
-                    }
-                    break;
-                case GameState.XMLLoadMenu:
-                    if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
-                    { 
-                        CurrentGameState = GameState.MainMenu;
-                        break;
-                    }
-                    while (TouchPanel.IsGestureAvailable)
-                    {
-                        GestureSample gesture = TouchPanel.ReadGesture();
-
-                        switch (gesture.GestureType)
-                        {
-                            case (GestureType.Tap):
-                                switch (loadMenu.checkClick(gesture.Position))
-                                {
-                                    case GameState.Playing: //debug
-                                        this.BeatTimerList = xmlConverter.loadBeatmapXML(PointGenerator.gettestxml());
-                                        this.LoadLateContent();
-                                        MediaPlayer.Play(munchymonk);
-                                        CurrentGameState = GameState.Playing;
-                                        break;
-
-                                    case GameState.SongLoadMenu:
-                                        this.CurrentGameState = GameState.SongLoadMenu;
-                                        loadMenu = new SongLoadMenu(this.Content);
-                                        break;
-
-                                    case GameState.MainMenu:
-                                        this.CurrentGameState = GameState.MainMenu;
-                                        break;
-                                }
-                                
                                 break;
                         }
                     }
@@ -299,16 +307,26 @@ namespace RhythmMaster
                                 switch (loadMenu.checkClick(gesture.Position))
                                 {
 
-                                    case GameState.Playing:
-                                        this.BeatTimerList = xmlConverter.loadBeatmapXML(PointGenerator.gettestxml()); //getXML auslagern!!
-                                        this.LoadLateContent();
-                                        MediaPlayer.Play(munchymonk);
-                                        CurrentGameState = GameState.Playing;
-                                        break;
+                                    //case GameState.Playing:
+                                    //    this.BeatTimerList = xmlConverter.loadBeatmapXML(DataSaver.SelectedXml());
+                                    //    this.LoadLateContent();
+                                    //    //MediaPlayer.Play(munchymonk);
+
+                                    //    CurrentGameState = GameState.Playing;
+                                    //    break;
 
                                     case GameState.XMLLoadMenu:
-                                        this.CurrentGameState = GameState.XMLLoadMenu;
-                                        loadMenu = new XMLLoadMenu(this.Content);
+                                        if (menuIdentifier == GameState.Playing)
+                                        {
+                                            this.CurrentGameState = GameState.XMLLoadMenu;
+                                            loadMenu = new XMLLoadMenu(this.Content);
+                                        }
+                                        else
+                                        {
+
+                                            this.CurrentGameState = GameState.BeatmapCreator;
+                                            MediaPlayer.Play(DataSaver.SelectedSong());
+                                        }
                                         break;
 
                                     case GameState.MainMenu:
@@ -320,6 +338,47 @@ namespace RhythmMaster
                         }
                     }
                     break;
+
+                case GameState.XMLLoadMenu:
+                    if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
+                    { 
+                        CurrentGameState = GameState.MainMenu;
+                        break;
+                    }
+                    while (TouchPanel.IsGestureAvailable)
+                    {
+                        GestureSample gesture = TouchPanel.ReadGesture();
+
+                        switch (gesture.GestureType)
+                        {
+                            case (GestureType.Tap):
+                                switch (loadMenu.checkClick(gesture.Position))
+                                {
+                                    case GameState.Playing: //debug
+
+                                        this.BeatTimerList = xmlConverter.loadBeatmapXML(DataSaver.SelectedXml());
+                                        this.LoadLateContent();
+                                        MediaPlayer.Play(DataSaver.SelectedSong());
+                                        PointGenerator.ResetPoints();
+                                        CurrentGameState = GameState.Playing;
+                                        break;
+
+                                    case GameState.SongLoadMenu:
+                                        this.CurrentGameState = GameState.SongLoadMenu;
+                                        loadMenu = new SongLoadMenu(this.Content);
+                                        break;
+
+                                    case GameState.MainMenu:
+                                        this.CurrentGameState = GameState.MainMenu;
+                                        break;
+                                }
+                                
+                                break;
+                        }
+                    }
+                    break;
+
+                
                 case GameState.Playing:                                             //Check for Beat klicks
                     if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                     {
@@ -337,6 +396,11 @@ namespace RhythmMaster
                                 checkIntersect(gesture.Position);
                                 break;
                         }
+                    }
+                    if ((long)MediaPlayer.PlayPosition.TotalMilliseconds >= endTime)
+                    {
+                        MediaPlayer.Stop();
+                        CurrentGameState = GameState.ScoreMenu;
                     }
                     
                     break;
@@ -396,6 +460,25 @@ namespace RhythmMaster
                         }
                     }
                     break;
+
+                case GameState.ScoreMenu:
+                    while (TouchPanel.IsGestureAvailable)
+                    {
+                        GestureSample gesture = TouchPanel.ReadGesture();
+
+                        switch (gesture.GestureType)
+                        {
+
+                            case (GestureType.Tap):
+                                if (returnToMainMenuButton.checkClick(gesture))
+                                {
+                                    this.CurrentGameState = GameState.MainMenu;
+                                }
+                                break;
+                        }
+                    }
+                    break;
+
                 case GameState.TestMenu:
 
                     //TouchCollection touchcol = TouchPanel.GetState();
@@ -447,10 +530,10 @@ namespace RhythmMaster
 
                     spriteBatch.DrawString(debugFont, PointGenerator.TotalPoints.ToString(), new Vector2(10, 10), Color.Black);
                     spriteBatch.DrawString(debugFont, PointGenerator.Multiplicator, new Vector2(10, 30), Color.Black);
-
-                    spriteBatch.DrawString(debugFont, debugstring1, new Vector2(10, 50), Color.Black);
-                    spriteBatch.DrawString(debugFont, debugstring2, new Vector2(10, 70), Color.Black);
-                    spriteBatch.DrawString(debugFont, debugstring3, new Vector2(10, 90), Color.Black);
+                    //this.countShakersAndBeats();
+                    //spriteBatch.DrawString(debugFont, debugstring1, new Vector2(10, 50), Color.Black);
+                    //spriteBatch.DrawString(debugFont, debugstring2, new Vector2(10, 70), Color.Black);
+                    //spriteBatch.DrawString(debugFont, endTime.ToString(), new Vector2(10, 90), Color.Black);
                     
 
                     PointGenerator.Draw(spriteBatch, (int) MediaPlayer.PlayPosition.TotalMilliseconds);
@@ -473,10 +556,21 @@ namespace RhythmMaster
                                     {
                                         PointGenerator.generatePointEffect(new Vector2(400f, 240f), PointEffectState.ReducedPoints, (int)MediaPlayer.PlayPosition.TotalMilliseconds);
                                     }
+                                    checkForEndOfSong();
                                 }
-                                
+
+                            }
+                            else
+                            {
+                                ClickablePlayObject tempBeat = kv.Value as ClickablePlayObject;
+                                if (!tempBeat.thisDraw)
+                                {
+                                    BeatDictionary.Remove(kv.Key);
+                                    PointGenerator.generatePointEffect(tempBeat.Center, 2f, (int)MediaPlayer.PlayPosition.TotalMilliseconds);
+                                }
                             }
                             kv.Value.Draw(spriteBatch);
+                            
                         }
                         else
                         {
@@ -491,10 +585,10 @@ namespace RhythmMaster
                 case GameState.BeatmapCreator:
                     gameTimeSinceCreating = (int)gameTime.TotalGameTime.TotalMilliseconds - gameTimeSinceStart;
                     returnToMainMenuButton.Draw(spriteBatch);
-                    spriteBatch.DrawString(debugFont, MediaPlayer.PlayPosition.TotalMilliseconds.ToString(), new Vector2(10, 10), Color.Black);
-                    spriteBatch.DrawString(debugFont, debugstring1, new Vector2(10, 30), Color.Black);
-                    spriteBatch.DrawString(debugFont, debugstring2, new Vector2(10, 50), Color.Black);
-                    spriteBatch.DrawString(debugFont, debugstring3, new Vector2(10, 70), Color.Black);
+                    //spriteBatch.DrawString(debugFont, MediaPlayer.PlayPosition.TotalMilliseconds.ToString(), new Vector2(10, 10), Color.Black);
+                    //spriteBatch.DrawString(debugFont, debugstring1, new Vector2(10, 30), Color.Black);
+                    //spriteBatch.DrawString(debugFont, debugstring2, new Vector2(10, 50), Color.Black);
+                    //spriteBatch.DrawString(debugFont, debugstring3, new Vector2(10, 70), Color.Black);
                     break;
                     
 
@@ -508,6 +602,11 @@ namespace RhythmMaster
 
                 case GameState.SongLoadMenu:
                     loadMenu.Draw(spriteBatch);
+                    break;
+                case GameState.ScoreMenu:
+                    returnToMainMenuButton.Draw(spriteBatch);
+                    spriteBatch.DrawString(scoreFont, "Final Score:", new Vector2(150, 200), Color.Red);
+                    spriteBatch.DrawString(scoreFont, PointGenerator.TotalPoints.ToString(), new Vector2(150, 300), Color.Red);
                     break;
                 case GameState.TestMenu:
                     gameTimeSincePlaying = (int)gameTime.TotalGameTime.TotalMilliseconds - gameTimeSinceStart;

@@ -19,6 +19,10 @@ namespace RhythmMaster.PlayMenu
             {
                 draw = value;
             }
+            get
+            {
+                return draw;
+            }
         }
         public PlayObjectIdentifier Identifier()
         {
@@ -133,9 +137,10 @@ namespace RhythmMaster.PlayMenu
                 _spriteBatch.Draw(texture, position, null, Color.Yellow, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
                 if (!this.BeatRing.Draw(_spriteBatch))
                 {
-                    PointGenerator.generatePointEffect(this.Center, 2f, (int)MediaPlayer.PlayPosition.TotalMilliseconds);
-                    this.vanish();
+                    //PointGenerator.generatePointEffect(this.Center, 2f, (int)MediaPlayer.PlayPosition.TotalMilliseconds);
+                    this.draw = false;
                 }
+
             }
 
 
@@ -144,11 +149,11 @@ namespace RhythmMaster.PlayMenu
 
 
         }
-        public void vanish()
-        {
-            this.Center = new Vector2(-500, -500);
-            this.draw = false;
-        }
+        //public void vanish()
+        //{
+        //    this.Center = new Vector2(-500, -500);
+        //    this.draw = false;
+        //}
 
 
 
