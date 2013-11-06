@@ -14,6 +14,5 @@ namespace RhythmMaster.Functions
         SongLoadMenu,
         SaveMenu,
         ScoreMenu,
-        TestMenu, //edit out
     }
 }
